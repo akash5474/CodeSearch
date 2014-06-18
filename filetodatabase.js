@@ -9,14 +9,11 @@ var extractDependencies = function(content) {
 };
 
 fs.readFile('./server.js', function(err, data) {
- if ( err ) throw err;
+  if ( err ) throw err;
 
- var content = data.toString();
+  var content = data.toString();
 
- var depsMapped = extractDependencies(content);
+  var depsMapped = extractDependencies(content);
 
- console.log(depsMapped);
+  console.log(depsMapped);
 });
-
-
-STAV
