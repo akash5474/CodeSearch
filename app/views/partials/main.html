@@ -1,20 +1,17 @@
 <div ng-include="'partials/navbar'"></div>
 
 <div class="jumbotron">
-  <h1>'Allo, 'Allo <span ng-show="currentUser">{{ currentUser.name }}</span>!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
-</div>
-
-<div class="row marketing">
-  <div ng-repeat="thing in awesomeThings">
-      <h4>{{thing.name}}</h4>
-      <p>{{thing.info}}</p>
+  <div class="form-group">
+    <form class="form" name="form" ng-submit="addFile()" novalidate>
+      <label>URL</label>
+      <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
+      {{fileUrl.url}}
+      <button type="submit" class="btn btn-lg btn-primary pull-right"> Sign in </button>
+    </form>
   </div>
 </div>
+
+
 
 <div class="footer">
   <p>♥ from the Yeoman team</p>
