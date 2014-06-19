@@ -2,7 +2,7 @@ var fs = require('fs');
 
 
 module.exports = function(content, query) {
-  var index = content.indexOf(query);
+  var startIndex = content.indexOf(query);
   var endIndex;
 
   var bracketCounter = {
@@ -14,11 +14,11 @@ module.exports = function(content, query) {
    ']': 0
   };
 
-  console.log(index);
+  // console.log(startIndex);
 
-  console.log(content[index + query.length]);
+  // console.log(content[startIndex + query.length]);
 
-  for ( var i = index + query.length; i < content.length; i++ ) {
+  for ( var i = startIndex + query.length; i < content.length; i++ ) {
    if ( content[i] in bracketCounter ) {
      bracketCounter[ content[i] ]++;
    }
@@ -38,11 +38,14 @@ module.exports = function(content, query) {
   }
 
 
-  console.log(bracketCounter);
-  console.log('startIndex', index);
-  console.log('endIndex', endIndex);
-  console.log('snippit');
+  // console.log(bracketCounter);
+  console.log('startIndex:', startIndex);
+  console.log('endIndex:', endIndex);
+  console.log('snippit:', content.substring(startIndex, endIndex + 1));
 
-  return content.substring(index, endIndex + 1);
-
+  if ( startIndex === -1 ) {
+    return;
+  } else {
+    return content.substring(startIndex, endIndex + 1);
+  }
 };
