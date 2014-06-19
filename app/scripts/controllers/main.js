@@ -4,7 +4,7 @@ angular.module('codeSearchApp')
   .controller('MainCtrl', function ($scope, $http) {
     $scope.fileUrl = {url: ''};
     $scope.findLibrary = {library:''}
-    $scope.findFunction = {function:''}
+    $scope.findFunction = {libFunction:''}
 
     $scope.addFile = function () {
       $http.post('/api/addFile', $scope.fileUrl)
@@ -14,7 +14,12 @@ angular.module('codeSearchApp')
     };
 
     $scope.findCode = function () {
-      $http.get('/api/findFile', $scope.findLibrary)
+      $http({
+          method:'GET',
+          url:'/api/findFile',
+          params: {library: $scope.findLibrary.library,
+                 libFunction: $scope.findFunction.libFunction}
+      })
         .success(function(data){
           console.log(data)
         })
