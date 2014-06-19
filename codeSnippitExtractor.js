@@ -1,10 +1,7 @@
 var fs = require('fs');
 
 
-fs.readFile('./thecode.js', function(err, data) {
-  if (err) throw err;
-  var content = data.toString();
-  var query = 'wikipedia_page';
+module.exports = function(content, query) {
   var index = content.indexOf(query);
   var endIndex;
 
@@ -45,6 +42,7 @@ fs.readFile('./thecode.js', function(err, data) {
   console.log('startIndex', index);
   console.log('endIndex', endIndex);
   console.log('snippit');
-  console.log(content.substring(index, endIndex + 1));
 
-});
+  return content.substring(index, endIndex + 1);
+
+};
