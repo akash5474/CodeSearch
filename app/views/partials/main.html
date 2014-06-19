@@ -5,10 +5,30 @@
     <form class="form" name="form" ng-submit="addFile()" novalidate>
       <label>URL</label>
       <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
-      {{fileUrl.url}}
-      <button type="submit" class="btn btn-lg btn-primary pull-right"> Sign in </button>
+      <button type="submit" class="btn btn-lg btn-primary pull-right">Add File</button>
     </form>
   </div>
+</div>
+
+<div class="jumbotron">
+  <div class="form-group">
+    <form class="form" name="form" ng-submit="findCode()" novalidate>
+      <div>
+        <label>Library</label>
+        <input type="text" name="url" class="form-control" ng-model="findLibrary.library" required>
+      </div>
+      <div>
+        <label>Function</label>
+        <input type="text" name="url" class="form-control" ng-model="findFunction.function" required>
+      </div>
+      <button type="submit" class="btn btn-lg btn-primary pull-right">Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <h2>Display Results</h2>
+  <p>Results:</p>
 </div>
 
 
