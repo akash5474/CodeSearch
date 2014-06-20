@@ -22,9 +22,11 @@ angular.module('codeSearchApp')
                  libFunction: $scope.findFunction.libFunction}
       })
       .success(function(data){
-          $timeout(function(){
-            $scope.codeSnippits = data.snippits;
-          }, 100);
+        var parsedData = angular.fromJson(data);
+        console.log(parsedData);
+        $timeout(function(){
+          $scope.codeSnippits = parsedData.snippits;
+        }, 100);
       });
     };
   });

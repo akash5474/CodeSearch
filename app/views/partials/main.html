@@ -26,12 +26,12 @@
   </div>
 </div>
 
-<div class="jumbotron">
+<div>
   <h2>Display Results</h2>
   <p>Results:</p>
-  <ul>
-    <li ng-repeat='snippit in codeSnippits track by $index'>{{snippit}}</li>
-  </ul>
+  <div class="snippit" ng-repeat='snippit in codeSnippits track by $index'>
+    <pre>{{snippit}}</pre>
+  </div>
 </div>
 
 
