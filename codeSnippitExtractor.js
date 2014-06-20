@@ -1,15 +1,14 @@
 var fs = require('fs');
 
-module.exports = function(content, libQuery, fnQuery) {
-
+var extractLibrary = function(content, libQuery) {
   var regex = new RegExp("require\\(\\s*[\\'\\\"]"+ libQuery +"[\\'\\\"]\\s*\\)");
 
-  var libIndex = content.match(regex);
+  var libIndex = content.match(regex).index;
 
   var libVar = [];
   var foundLib = false;
 
-  for ( var i = libIndex.index - 1; i >= 0; i-- ) {
+  for ( var i = libIndex - 1; i >= 0; i-- ) {
     if ( content[i] !== '=' && content[i] !== ' ' ) {
       foundLib = true;
       libVar.unshift( content[i] );
@@ -20,11 +19,15 @@ module.exports = function(content, libQuery, fnQuery) {
     }
   }
 
-  var libVarStr = libVar.join('').trim()
+  return libVar.join('').trim();
+};
 
-  // console.log( libVarStr );
-
-  var startIndex = content.indexOf(libVarStr + '.' + fnQuery);
+var extractSnippit = function(result) {
+  var content = result.input;
+  var startIndex = result.index;
+  var query = result[0].split('.');
+  var libVarStr = query[0];
+  var fnQuery = query[1];
   var endIndex;
 
   var bracketCounter = {
@@ -36,27 +39,23 @@ module.exports = function(content, libQuery, fnQuery) {
    ']': 0
   };
 
-  // console.log(startIndex);
-
-  // console.log(content[startIndex + fnQuery.length]);
-
   for ( var i = startIndex + fnQuery.length; i < content.length; i++ ) {
-   if ( content[i] in bracketCounter ) {
-     bracketCounter[ content[i] ]++;
-   }
+    if ( content[i] in bracketCounter ) {
+      bracketCounter[ content[i] ]++;
+    }
 
-   if ( bracketCounter['{'] === bracketCounter['}']
-     && bracketCounter['('] === bracketCounter[')']
-     && bracketCounter['['] === bracketCounter[']'] )
-   {
-     if ( content[ i + 1 ] !== ' '
-       && content[ i + 1 ] !== ';' ) {
-       continue;
-     } else {
-       endIndex = i;
-       break;
-     }
-   }
+    if ( bracketCounter['{'] === bracketCounter['}']
+      && bracketCounter['('] === bracketCounter[')']
+      && bracketCounter['['] === bracketCounter[']'] )
+    {
+      if ( content[ i + 1 ] !== ' '
+        && content[ i + 1 ] !== ';' ) {
+        continue;
+      } else {
+        endIndex = i;
+        break;
+      }
+    }
   }
 
 
@@ -70,4 +69,22 @@ module.exports = function(content, libQuery, fnQuery) {
   } else {
     return content.substring(startIndex, endIndex + 1);
   }
+};
+
+module.exports = function(content, libQuery, fnQuery) {
+
+  var libVarStr = extractLibrary(content, libQuery);
+
+  var regex = new RegExp(libVarStr + '\\.' + fnQuery, 'g');
+
+  var result;
+  var resultsArr = [];
+
+  while( (result = regex.exec(content)) != null ) {
+    resultsArr.push( extractSnippit(result) );
+  }
+
+  // console.log(resultsArr);
+
+  return resultsArr;
 };
