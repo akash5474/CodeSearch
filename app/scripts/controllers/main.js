@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .controller('MainCtrl', function ($scope, $http) {
+  .controller('MainCtrl', function ($scope, $http, $timeout) {
+    $scope.codeSnippets = [];
     $scope.fileUrl = {url: ''};
-    $scope.findLibrary = {library:''}
-    $scope.findFunction = {libFunction:''}
+    $scope.findLibrary = {library:''};
+    $scope.findFunction = {libFunction:''};
 
     $scope.addFile = function () {
       $http.post('/api/addFile', $scope.fileUrl)
         .success(function(data){
-          console.log(data)
+          console.log(data);
         })
     };
 
@@ -20,8 +21,10 @@ angular.module('codeSearchApp')
           params: {library: $scope.findLibrary.library,
                  libFunction: $scope.findFunction.libFunction}
       })
-        .success(function(data){
-          console.log(data)
-        })
+      .success(function(data){
+          $timeout(function(){
+            $scope.codeSnippits = data.snippits;
+          }, 100);
+      });
     };
   });
