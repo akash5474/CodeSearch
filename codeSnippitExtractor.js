@@ -1,4 +1,5 @@
 var fs = require('fs');
+var esprima = require('esprima');
 
 var extractLibrary = function(content, libQuery) {
   var regex = new RegExp("require\\(\\s*[\\'\\\"]"+ libQuery +"[\\'\\\"]\\s*\\)");
@@ -23,12 +24,23 @@ var extractLibrary = function(content, libQuery) {
 };
 
 var extractSnippit = function(result) {
+
+  console.log(result);
+
   var content = result.input;
   var startIndex = result.index;
-  var query = result[0].split('.');
-  var libVarStr = query[0];
-  var fnQuery = query[1];
   var endIndex;
+  var query;
+  var fnQuery;
+  var libVarStr;
+
+  if ( result[0].indexOf('.') === -1 ) {
+    fnQuery = result[0];
+  } else {
+    query = result[0].split('.');
+    libVarStr = query[0];
+    fnQuery = query[1];
+  }
 
   var bracketCounter = {
    '{': 0,
@@ -73,9 +85,12 @@ var extractSnippit = function(result) {
 
 module.exports = function(content, libQuery, fnQuery) {
 
-  var libVarStr = extractLibrary(content, libQuery);
-
-  var regex = new RegExp(libVarStr + '\\.' + fnQuery, 'g');
+  if (libQuery && libQuery !== fnQuery){
+    var libVarStr = extractLibrary(content, libQuery);
+    var regex = new RegExp(libVarStr + '\\.' + fnQuery, 'g');
+  } else  {
+    var regex = new RegExp(fnQuery, 'g');
+  }
 
   var result;
   var resultsArr = [];
