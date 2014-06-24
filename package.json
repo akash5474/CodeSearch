@@ -20,7 +20,8 @@
     "passport": "~0.2.0",
     "passport-local": "~0.1.6",
     "request": "^2.36.0",
-    "static-favicon": "~1.0.1"
+    "static-favicon": "~1.0.1",
+    "cheerio": "~0.17.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
