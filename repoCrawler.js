@@ -1,5 +1,6 @@
 var cheerio = require('cheerio');
 var request = require('request');
+var exec = require('child_process').exec;
 // var async = require('async');
 
 var npmURL = 'https://www.npmjs.org';
@@ -36,8 +37,28 @@ request('https://www.npmjs.org/browse/depended/express', function(err, res, body
                 // console.log('Found repo:', repoHref, 'Stars:', stars);
 
                 if ( stars >= starThresh ) {
-                  //clone repo
-                  console.log('Repo has more than 50 stars', $('input.clone.js-url-field').val() );
+                  // Clone Repo
+                  var cloneUrl = $('input.clone.js-url-field').val()
+                  // console.log('Repo has more than 50 stars', cloneUrl );
+                  console.log('cloning', cloneUrl);
+
+                  try {
+                    process.chdir('reposToParse');
+                    console.log('New directory: ' + process.cwd());
+                  }
+                  catch (err) {
+                    console.log('chdir: ' + err);
+                  }
+
+                  var cloneRepoPS = exec('git clone ' + cloneUrl,
+                    function(err, stdout, stderr) {
+                      console.log('stdout: ' + stdout);
+                      console.log('stderr: ' + stderr);
+                      if (err !== null) {
+                        console.log('exec error: ' + err);
+                      }
+                  });
+
                 }
               } else if ( repoLinkRes.statusCode === 404 ) {
                 // console.log('404 for repo:', repoHref);
@@ -45,7 +66,6 @@ request('https://www.npmjs.org/browse/depended/express', function(err, res, body
             });
           });
 
-          // console.log($('#package h1').text(), repoEl.length);
         }
       });
 
