@@ -1,38 +1,6 @@
 var fs = require('fs');
 var esprima = require('esprima');
 
-var extractLibrary = function(content, libQuery) {
-  // var regex = new RegExp("require\\(\\s*[\\'\\\"]"+ libQuery +"[\\'\\\"]\\s*\\)");
-
-  // var libIndex = content.match(regex).index;
-
-  // var libVar = [];
-  // var foundLib = false;
-
-  // for ( var i = libIndex - 1; i >= 0; i-- ) {
-  //   if ( content[i] !== '=' && content[i] !== ' ' ) {
-  //     foundLib = true;
-  //     libVar.unshift( content[i] );
-  //   }
-
-  //   if ( foundLib && content[i] === ' ' ) {
-  //     break;
-  //   }
-  // }
-
-  // return libVar.join('').trim();
-
-
-
-
-
-
-
-
-
-
-
-};
 
 var extractSnippit = function(result) {
 
@@ -42,15 +10,7 @@ var extractSnippit = function(result) {
   var endIndex;
   var fnQuery = result.query;
   console.log('extractSnippit fnQuery', result.query, startIndex);
-  // var libVarStr;
 
-  // if ( result[0].indexOf('.') === -1 ) {
-  //   fnQuery = result[0];
-  // } else {
-  //   query = result[0].split('.');
-  //   libVarStr = query[0];
-  //   fnQuery = query[1];
-  // }
 
   var bracketCounter = {
    '{': 0,
@@ -83,31 +43,18 @@ var extractSnippit = function(result) {
   }
 };
 
+
 module.exports = function(content, libQuery, fnQuery) {
 
-  // if (libQuery && libQuery !== fnQuery){
-  //   var libVarStr = extractLibrary(content, libQuery);
-  //   var regex = new RegExp(libVarStr + '\\.' + fnQuery, 'g');
-  // } else  {
-  //   var regex = new RegExp(fnQuery, 'g');
-  // }
-
-  // var result;
   var resultsArr = [];
-
-  // while( (result = regex.exec(content)) != null ) {
-  //   resultsArr.push( extractSnippit(result) );
-  // }
-
-  // console.log(resultsArr);
+  var parsedData = esprima.tokenize(content, {range: true});
+  var libVarStr;
 
   if( libQuery === fnQuery ) {
     fnQuery = undefined;
   }
 
-  var parsedData = esprima.tokenize(content, {range: true});
-
-  var libVarStr;
+  // Extract variable name assigned to library
 
   for ( var j = 0; j < parsedData.length; j++ ) {
     var o = parsedData[j];
@@ -124,7 +71,7 @@ module.exports = function(content, libQuery, fnQuery) {
       }
   }
 
-  console.log("LIBVARSTRING:", libVarStr)
+  // Extract code snippet
 
   for (var i = 0; i < parsedData.length; i++) {
     var o = parsedData[i];
@@ -135,15 +82,13 @@ module.exports = function(content, libQuery, fnQuery) {
              parsedData[ i+2 ].value === fnQuery &&
              parsedData[ i+2 ].type === 'Identifier' ) {
 
-          console.log({index: parsedData[i].range[0], query: libVarStr + '.' + fnQuery});
-          resultsArr.push(extractSnippit({index: parsedData[i].range[0], input:content, query: libVarStr + '.' + fnQuery}));
+              resultsArr.push(extractSnippit({index: parsedData[i].range[0], input:content, query: libVarStr + '.' + fnQuery}));
         }
       } else {
         if ( parsedData[ i+1 ].value === '(' &&
              parsedData[ i+1 ].type === 'Punctuator' ) {
 
-          console.log({index: parsedData[i].range[0], query: libVarStr});
-          resultsArr.push(extractSnippit({index: parsedData[i].range[0], input:content, query: libVarStr}));
+              resultsArr.push(extractSnippit({index: parsedData[i].range[0], input:content, query: libVarStr}));
         }
       }
     }
