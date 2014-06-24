@@ -6,69 +6,129 @@ var exec = require('child_process').exec;
 var npmURL = 'https://www.npmjs.org';
 var starThresh = 50;
 
-request('https://www.npmjs.org/browse/depended/express', function(err, res, body) {
-  if ( !err && res.statusCode == 200 ) {
+var cloneRepo = function(cloneUrl) {
+  console.log('cloning', cloneUrl);
 
-    var $ = cheerio.load(body);
+  try {
+    process.chdir('reposToParse');
+    console.log('New directory: ' + process.cwd());
+  }
+  catch (err) {
+    console.log('chdir: ' + err);
+  }
 
-    var dependentLinks = $('.row a');
+  exec('git clone ' + cloneUrl,
+   function(err, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (err !== null) {
+        console.log('exec error: ' + err);
+      }
+  });
+};
 
-    dependentLinks.each(function(idx, el) {
-      var depHref = $(this).attr('href');
+var requestGithubAndClone = function(repoHref) {
+  request( repoHref, function(repoLinkErr, repoLinkRes, repoLinkBody) {
 
-      request(npmURL + depHref, function(depLinkErr, depLinkRes, depLinkBody) {
-        if ( !depLinkErr && depLinkRes.statusCode == 200 ) {
-          var $ = cheerio.load(depLinkBody);
+    if ( !repoLinkErr && repoLinkRes.statusCode === 200 ) {
 
-          var repoEl = $('.metadata a').filter(function() {
+      var $ = cheerio.load(repoLinkBody);
+      var stars = +$('a.social-count.js-social-count').text();
+      // console.log('Found repo:', repoHref, 'Stars:', stars);
 
-            var linkText = $(this).text();
-            var repoUrlSubstring = linkText.substring(linkText.length - 4);
-            return repoUrlSubstring === '.git';
+      if ( stars >= starThresh ) {
+        // Clone Repo
+        var cloneUrl = $('input.clone.js-url-field').val()
+        // console.log('Repo has more than 50 stars', cloneUrl );
+        cloneRepo(cloneUrl);
 
-          }).each(function() {
-            var repoHref = $(this).attr('href');
-            request( repoHref, function(repoLinkErr, repoLinkRes, repoLinkBody) {
+      }
+    } else if ( repoLinkRes.statusCode === 404 ) {
+      // console.log('404 for repo:', repoHref);
+    }
+  });
+};
 
-              if ( !repoLinkErr && repoLinkRes.statusCode === 200 ) {
+var requestNpmPage = function(pageHref) {
+  request(npmURL + pageHref,
+    function(depLinkErr, depLinkRes, depLinkBody) {
+      if ( !depLinkErr && depLinkRes.statusCode == 200 ) {
+        var $ = cheerio.load(depLinkBody);
 
-                var $ = cheerio.load(repoLinkBody);
-                var stars = +$('a.social-count.js-social-count').text();
-                // console.log('Found repo:', repoHref, 'Stars:', stars);
+        var repoEl = $('.metadata a').filter(function() {
 
-                if ( stars >= starThresh ) {
-                  // Clone Repo
-                  var cloneUrl = $('input.clone.js-url-field').val()
-                  // console.log('Repo has more than 50 stars', cloneUrl );
-                  console.log('cloning', cloneUrl);
+          var linkText = $(this).text();
+          var repoUrlSubstring = linkText.substring(linkText.length - 4);
+          return repoUrlSubstring === '.git';
 
-                  try {
-                    process.chdir('reposToParse');
-                    console.log('New directory: ' + process.cwd());
-                  }
-                  catch (err) {
-                    console.log('chdir: ' + err);
-                  }
+        }).each(function() {
+          var repoHref = $(this).attr('href');
 
-                  var cloneRepoPS = exec('git clone ' + cloneUrl,
-                    function(err, stdout, stderr) {
-                      console.log('stdout: ' + stdout);
-                      console.log('stderr: ' + stderr);
-                      if (err !== null) {
-                        console.log('exec error: ' + err);
-                      }
-                  });
+          requestGithubAndClone(repoHref);
+        });
+      }
+    });
+};
 
-                }
-              } else if ( repoLinkRes.statusCode === 404 ) {
-                // console.log('404 for repo:', repoHref);
-              }
-            });
-          });
+// var startUrl = 'https://www.npmjs.org/browse/depended/express';
 
-        }
+var requestModuleDepended = function(dependedUrl) {
+  request(dependedUrl, function(err, res, body) {
+    if ( !err && res.statusCode == 200 ) {
+
+      var $ = cheerio.load(body);
+
+      var dependentLinks = $('.row a');
+      var paginationLinks = $('h1+ .description a');
+
+      dependentLinks.each(function(idx, el) {
+        var depHref = $(this).attr('href');
+
+        requestNpmPage(depHref);
       });
 
+      paginationLinks.each(function(idx, el) {
+        var text = $(this).text()
+                          .substring(0, $(this).text().length - 2);
+
+        if ( text === 'next' ) {
+          var nextHref = $(this).attr('href');
+          console.log(nextHref);
+          requestModuleDepended(npmURL + nextHref);
+        }
+      });
+    }
+  });
+};
+
+var startUrl = 'https://www.npmjs.org/browse/star';
+
+var requestStarred = function(starredUrl) {
+  request(starredUrl, function(err, res, body) {
+    var $ = cheerio.load(body);
+
+    var starredRepoLinks = $('.row a');
+    var paginationLinks = $('h1+ .description a');
+
+    starredRepoLinks.each(function(idx, el) {
+      var repo = $(this).text();
+      console.log('https://www.npmjs.org/browse/depended/' + repo);
+      requestModuleDepended('https://www.npmjs.org/browse/depended/' + repo);
     });
-  }
-});
+
+    paginationLinks.each(function(idx, el) {
+      var text = $(this).text()
+                        .substring(0, $(this).text().length - 2);
+
+      if ( text === 'next' ) {
+        var nextHref = $(this).attr('href');
+        // console.log(nextHref);
+        requestStarred(npmURL + nextHref);
+      }
+    });
+
+  });
+};
+
+// requestModuleDepended(startUrl);
+requestStarred(startUrl);
