@@ -14,6 +14,13 @@ angular.module('codeSearchApp')
         })
     };
 
+    $scope.testDirectorySearch = function () {
+      $http.post('/api/testDirectorySearch', {})
+        .success(function(data){
+          console.log(data);
+        })
+    }
+
     $scope.findCode = function () {
       $http({
           method:'GET',
