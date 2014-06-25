@@ -4,6 +4,7 @@ var exec = require('child_process').exec;
 // var async = require('async');
 
 var npmURL = 'https://www.npmjs.org';
+var startUrl = 'https://www.npmjs.org/browse/star';
 var starThresh = 50;
 
 var cloneRepo = function(cloneUrl) {
@@ -38,7 +39,7 @@ var requestGithubAndClone = function(repoHref) {
 
       if ( stars >= starThresh ) {
         // Clone Repo
-        var cloneUrl = $('input.clone.js-url-field').val()
+        var cloneUrl = $('input.clone.js-url-field').val();
         // console.log('Repo has more than 50 stars', cloneUrl );
         cloneRepo(cloneUrl);
 
@@ -93,15 +94,13 @@ var requestModuleDepended = function(dependedUrl) {
 
         if ( text === 'next' ) {
           var nextHref = $(this).attr('href');
-          console.log(nextHref);
+          // console.log(nextHref);
           requestModuleDepended(npmURL + nextHref);
         }
       });
     }
   });
 };
-
-var startUrl = 'https://www.npmjs.org/browse/star';
 
 var requestStarred = function(starredUrl) {
   request(starredUrl, function(err, res, body) {
@@ -112,7 +111,7 @@ var requestStarred = function(starredUrl) {
 
     starredRepoLinks.each(function(idx, el) {
       var repo = $(this).text();
-      console.log('https://www.npmjs.org/browse/depended/' + repo);
+      // console.log('https://www.npmjs.org/browse/depended/' + repo);
       requestModuleDepended('https://www.npmjs.org/browse/depended/' + repo);
     });
 
