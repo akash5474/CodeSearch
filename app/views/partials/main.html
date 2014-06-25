@@ -1,71 +1,11 @@
 <!-- <div ng-include="'partials/navbar'"></div> -->
 <p>
-<div class="jumbotron">
-  <div class="form-group">
-    <form class="form" name="form" ng-submit="addFile()" novalidate>
-      <label>URL</label>
-      <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
-      <button type="submit" class="btn btn-lg btn-primary pull-right">Add File</button>
-    </form>
-  </div>
-</div>
-
-<div class="jumbotron">
-  <div class="form-group">
-    <form class="form" name="form" ng-submit="findCode()" novalidate>
-      <div>
-        <label>Library</label>
-        <input type="text" name="url" class="form-control" ng-model="findLibrary.library" required>
-      </div>
-      <div>
-        <label>Function</label>
-        <input type="text" name="url" class="form-control" ng-model="findFunction.libFunction" required>
-      </div>
-      <button type="submit" class="btn btn-lg btn-primary pull-right">Search</button>
-    </form>
-  </div>
-</div>
-
-<div>
-  <h2>Display Results</h2>
-  <p>Results:</p>
-  <div class="snippit" ng-repeat='snippit in codeSnippits track by $index'>
-    <pre>{{snippit}}</pre>
-  </div>
-</div>
 
 
 
 <div class="footer">
   <p>♥ from the Yeoman team</p>
 </div>
-
-
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="assets/img/favicon.png">
-
-    <title>FLATTY - Free Bootstrap 3 Landing Page</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
-    <!-- Fonts from Google Fonts -->
-  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
 
   <body>
 
@@ -92,13 +32,21 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6">
-          <h1>Make your landing page<br/>
-          look really good.</h1>
-          <form class="form-inline" role="form">
-            <div class="form-group">
-              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter your email address">
+          <h1>Searching Code Snippits in a Snap</h1>
+          <form class="form-inline" name="form" ng-submit="addFile()" novalidate>
+            <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
+            <button type="submit" class="btn btn-lg btn-primary">Add File</button>
+          </form>
+          <form class="form" name="form" ng-submit="findCode()" novalidate>
+            <div>
+              <label>Library</label>
+              <input type="text" name="url" class="form-control" ng-model="findLibrary.library" required>
             </div>
-            <button type="submit" class="btn btn-warning btn-lg">Invite Me!</button>
+            <div>
+              <label>Function</label>
+              <input type="text" name="url" class="form-control" ng-model="findFunction.libFunction" required>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary">Search</button>
           </form>
         </div><!-- /col-lg-6 -->
         <div class="col-lg-6">
@@ -107,6 +55,14 @@
       </div><!-- /row -->
     </div><!-- /container -->
   </div><!-- /headerwrap -->
+
+  <div>
+    <h2>Display Results</h2>
+    <p>Results:</p>
+    <div class="snippit" ng-repeat='snippit in codeSnippits track by $index'>
+      <snippit snip="snippit"></snippit>
+    </div>
+  </div>
 
   <div class="container">
     <hr>
