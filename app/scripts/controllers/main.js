@@ -11,7 +11,7 @@ angular.module('codeSearchApp')
 
     $scope.page = {
       currPage: 0,
-      resultsPerPage: 2
+      resultsPerPage: 10
     };
 
     $scope.getNumPages = function() {

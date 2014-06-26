@@ -235,6 +235,10 @@ i {
     background-size: cover;
 }
 
+div.snippit pre:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 #headerwrap h1 {
   margin-top: 20px;
   margin-bottom: 50px;
