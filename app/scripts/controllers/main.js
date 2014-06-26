@@ -2,10 +2,19 @@
 
 angular.module('codeSearchApp')
   .controller('MainCtrl', function ($scope, $http, $timeout) {
-    $scope.codeSnippets = [];
+    $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
     $scope.findLibrary = {library:''};
     $scope.findFunction = {libFunction:''};
+
+    $scope.page = {
+      currPage: 0,
+      resultsPerPage: 2
+    };
+
+    $scope.getNumPages = function() {
+      return Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
+    };
 
     $scope.addFile = function () {
       $http.post('/api/addFile', $scope.fileUrl)
