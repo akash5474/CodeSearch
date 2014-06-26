@@ -2,6 +2,7 @@
 
 angular.module('codeSearchApp')
   .controller('MainCtrl', function ($scope, $http, $timeout) {
+    $scope.isCollapsed = {collapse:false};
     $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
     $scope.findLibrary = {library:''};
@@ -51,4 +52,5 @@ angular.module('codeSearchApp')
         }, 100);
       });
     };
+
   });

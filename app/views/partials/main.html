@@ -1,6 +1,8 @@
+
 <div ng-include="'partials/navbar'"></div>
 
 <!-- <div class="jumbotron">
+>>>>>>> upstream/master
   <div class="form-group">
     <form class="form" name="form" ng-submit="addFile()" novalidate>
       <label>URL</label>
@@ -11,6 +13,10 @@
   <br><br>
 </div> -->
 
+
+  <body>
+
+    <!-- Fixed navbar -->
 <!-- <div class="jumbotron">
   <div class="form-group">
     <form class="form" name="form" ng-submit="findCode()" novalidate>
@@ -25,13 +31,16 @@
       <button type="submit" class="btn btn-lg btn-primary pull-right">Search</button>
     </form>
   </div> -->
-</div>
+
 
 <div id="headerwrap">
   <div class="container">
     <div class="row">
+      <div collapse="isCollapsed.collapse">
+          <h1 class='col-lg-offset-1'>Find Example Code Snippits in a Snap</h1>
+      </div>
       <div class="col-lg-10 col-lg-offset-1">
-        <h1>Find Example Code Snippits in a Snap</h1>
+
 <!--         <form class="form-inline" name="form" ng-submit="addFile()" novalidate>
           <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
           <button type="submit" class="btn btn-lg btn-primary">Add File</button>
@@ -55,15 +64,12 @@
                 <input type="text" name="func" class="form-control" ng-model="findFunction.libFunction" required>
               </div>
               <div class="col-lg-4" id="search-btn">
-                <button type="submit" class="btn btn-lg btn-primary">Search</button>
+                <button type="submit" class="btn btn-lg btn-primary" ng-click="isCollapsed.collapse = true">Search</button>
               </div>
             </div>
           </form>
         </div>
       </div><!-- /col-lg-6 -->
-      <!-- <div class="col-lg-6"> -->
-<!--         <img class="img-responsive" src="../../images/ipad-hand.png" alt=""> -->
-      <!-- </div>/col-lg-6 -->
     </div><!-- /row -->
   </div><!-- /container -->
 </div><!-- /headerwrap -->
