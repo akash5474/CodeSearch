@@ -33,11 +33,11 @@
   <p>Results:</p>
   <div ng-show="codeSnippits.length">
     <button ng-disabled="page.currPage === 0"
-      ng-click="page.currPage= page.currPage-1" class="btn btn-warning">Prev</button>
+      ng-click="page.currPage= page.currPage-1" class="btn btn-info">Prev</button>
     {{page.currPage + 1}} / {{ getNumPages() }}
     <button
       ng-disabled="page.currPage >= codeSnippits.length / page.resultsPerPage - 1"
-      ng-click="page.currPage=page.currPage+1" class="btn btn-warning">Next</button>
+      ng-click="page.currPage=page.currPage+1" class="btn btn-info">Next</button>
   </div>
   <div class="snippit" ng-repeat="snippit in codeSnippits |
                                   startPageFrom : page.currPage*page.resultsPerPage |
