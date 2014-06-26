@@ -91,7 +91,7 @@
   <div class="snippit" ng-repeat="snippit in codeSnippits |
                                   startPageFrom : page.currPage*page.resultsPerPage |
                                   limitTo : page.resultsPerPage track by $index">
-    <pre>{{snippit}}</pre>
+    <pre ng-click="open('lg', snippit)">{{snippit}}</pre>
   </div>
   <div>
     <button ng-disabled="page.currPage === 0"
