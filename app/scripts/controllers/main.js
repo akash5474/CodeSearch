@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .controller('MainCtrl', function ($scope, $http, $timeout) {
+  .controller('MainCtrl', function ($scope, $http, $timeout, $modal, $log) {
     $scope.isCollapsed = {collapse:false};
     $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
@@ -52,4 +52,25 @@ angular.module('codeSearchApp')
       });
     };
 
+    $scope.open = function(size, snippitData) {
+
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/codesnippetmodal',
+        controller: 'ModalCtrl',
+        size: size,
+        resolve: {
+          data: function() {
+            return {
+              snippitData: snippitData
+            }
+          }
+        }
+      });
+
+      modalInstance.result.then(function(selectedItem) {
+        $scope.selected = selectedItem;
+      }, function() {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
   });
