@@ -36,8 +36,7 @@ angular.module('codeSearchApp')
       $http({
           method:'GET',
           url:'/api/findFile',
-          params: {library: $scope.findLibrary.library,
-                 libFunction: $scope.findFunction.libFunction}
+          params: { libFunction: $scope.findFunction.libFunction }
       })
       .success(function(data){
         var parsedData = angular.fromJson(data);
