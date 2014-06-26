@@ -1,5 +1,5 @@
 <!-- <div ng-include="'partials/navbar'"></div> -->
-
+<br>
 <div class="jumbotron">
   <div class="form-group">
     <form class="form" name="form" ng-submit="addFile()" novalidate>
@@ -12,35 +12,6 @@
   <button ng-click="testDirectorySearch()" class="btn btn-lg btn-danger">Test Directory Search</button>
 </div>
 
-<div class="jumbotron">
-  <div class="form-group">
-    <form class="form" name="form" ng-submit="findCode()" novalidate>
-      <div>
-        <label>Library</label>
-        <input type="text" name="url" class="form-control" ng-model="findLibrary.library" required>
-      </div>
-      <div>
-        <label>Function</label>
-        <input type="text" name="url" class="form-control" ng-model="findFunction.libFunction" required>
-      </div>
-      <button type="submit" class="btn btn-lg btn-primary pull-right">Search</button>
-    </form>
-  </div>
-</div>
-
-<div>
-  <h2>Display Results</h2>
-  <p>Results:</p>
-  <div class="snippit" ng-repeat='snippit in codeSnippits track by $index'>
-    <pre>{{snippit}}</pre>
-  </div>
-</div>
-
-
-
-<div class="footer">
-  <p>♥ from the Yeoman team</p>
-</div>
 
   <body>
 
@@ -66,27 +37,20 @@
   <div id="headerwrap">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6">
-          <h1>Searching Code Snippits in a Snap</h1>
-          <form class="form-inline" name="form" ng-submit="addFile()" novalidate>
-            <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
-            <button type="submit" class="btn btn-lg btn-primary">Add File</button>
-          </form>
-          <form class="form" name="form" ng-submit="findCode()" novalidate>
-            <div>
-              <label>Library</label>
-              <input type="text" name="url" class="form-control" ng-model="findLibrary.library" required>
-            </div>
-            <div>
-              <label>Function</label>
-              <input type="text" name="url" class="form-control" ng-model="findFunction.libFunction" required>
-            </div>
-            <button type="submit" class="btn btn-lg btn-primary">Search</button>
-          </form>
-        </div><!-- /col-lg-6 -->
-        <div class="col-lg-6">
-          <img class="img-responsive" src="../../images/ipad-hand.png" alt="">
-        </div><!-- /col-lg-6 -->
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <form class="form" name="form" ng-submit="findCode()" novalidate>
+              <div>
+
+                <input type="text" name="url" class="form-control" ng-model="findLibrary.library" required placeholder='Library Name'>
+              </div>
+              <br>
+              <div>
+
+                <input type="text" name="url" class="form-control" ng-model="findFunction.libFunction" required placeholder='Function'>
+              </div>
+            </form>
+          </div>
       </div><!-- /row -->
     </div><!-- /container -->
   </div><!-- /headerwrap -->
