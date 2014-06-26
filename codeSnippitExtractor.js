@@ -10,6 +10,8 @@ var extractSnippit = function(result) {
   var endIndex;
   var fnQuery = result.query;
   // console.log('extractSnippit fnQuery', result.query, startIndex);
+  // console.log('fnQuery', fnQuery);
+  // console.log('content', content);
 
 
   var bracketCounter = {
@@ -22,7 +24,6 @@ var extractSnippit = function(result) {
   };
 
   for ( var i = startIndex + fnQuery.length; i < content.length; i++ ) {
-
     if ( content[i] in bracketCounter ) {
       bracketCounter[ content[i] ]++;
     }
@@ -44,52 +45,54 @@ var extractSnippit = function(result) {
 };
 
 
-module.exports = function(content, libQuery, fnQuery) {
-
+module.exports = function(content, fnQuery) {
   var resultsArr = [];
   var parsedData = esprima.tokenize(content, {range: true});
-  var libVarStr;
+  var methodMatches = fnQuery.match(/\./g);
 
-  if( libQuery === fnQuery ) {
-    fnQuery = undefined;
-  }
+  if (methodMatches && methodMatches.length === 1 ) {
+    var dotPosition = fnQuery.indexOf('.');
+    var fnQueryPartOne = fnQuery.substring(0, dotPosition);
+    var fnQueryPartTwo = fnQuery.substring(dotPosition+1);
+    for (var i = 0; i <parsedData.length; i++) {
+      var o = parsedData[i];
+      if (o.type === 'Identifier' &&
+          o.value === fnQueryPartOne &&
+          parsedData[ i+1 ].value === '.' &&
+          parsedData[ i+1 ].type === 'Punctuator' &&
+          parsedData[ i+2 ].value === fnQueryPartTwo &&
+          parsedData[ i+2 ].type === 'Identifier') {
 
-  // Extract variable name assigned to library
-
-  for ( var j = 0; j < parsedData.length; j++ ) {
-    var o = parsedData[j];
-
-      if ( o.type === 'String' &&
-           o.value === "'"+ libQuery + "'" &&
-           parsedData[ j+1 ].value === ')' &&
-           parsedData[ j-1 ].value === '(' &&
-           parsedData[ j-2 ].value === 'require' &&
-           parsedData[ j-3 ].value === '=' &&
-           parsedData[ j-4 ].type === 'Identifier' ) {
-
-        libVarStr = parsedData[ j-4 ].value;
+        fnQuery = fnQueryPartOne + '.' + fnQueryPartTwo;
+        console.log('extracting snippit', {input: content, index: parsedData[ i ].range[0], query: fnQuery});
+        var snippit = extractSnippit({input: content, index: parsedData[ i ].range[0], query: fnQuery});
+        resultsArr.push(snippit);
+        console.log('snippit', snippit);
       }
-  }
+    }
+  } else if ( !methodMatches ) {
+    for ( var i = 0; i < parsedData.length; i++ ) {
+      var o = parsedData[i];
+      if (o.type === 'Identifier' &&
+        o.value === fnQuery &&
+        parsedData[ i-1 ].type === 'Punctuator' &&
+        parsedData[ i-1 ].value === '.' &&
+        parsedData[ i-2 ].type === 'Identifier') {
 
-  // Extract code snippet
+        fnQuery = parsedData[ i-2 ].value + '.' + fnQuery;
+        var snippit = extractSnippit({ input: content, index: parsedData[ i-2 ].range[0], query: fnQuery });
+        console.log('method snippit', snippit);
+        resultsArr.push(snippit);
+      } else if (o.type === 'Identifier' &&
+                 o.value === fnQuery &&
+                 parsedData[ i+1 ].type === 'Punctuator' &&
+                 parsedData[ i+1 ].value === '.' &&
+                 parsedData[ i+2 ].type === 'Identifier') {
 
-  for (var i = 0; i < parsedData.length; i++) {
-    var o = parsedData[i];
-    if ( o.type === 'Identifier' && o.value === libVarStr ) {
-      if ( fnQuery ) {
-        if ( parsedData[ i+1 ].value === '.' &&
-             parsedData[ i+1 ].type === 'Punctuator' &&
-             parsedData[ i+2 ].value === fnQuery &&
-             parsedData[ i+2 ].type === 'Identifier' ) {
-
-              resultsArr.push(extractSnippit({index: parsedData[i].range[0], input:content, query: libVarStr + '.' + fnQuery}));
-        }
-      } else {
-        if ( parsedData[ i+1 ].value === '(' &&
-             parsedData[ i+1 ].type === 'Punctuator' ) {
-
-              resultsArr.push(extractSnippit({index: parsedData[i].range[0], input:content, query: libVarStr}));
-        }
+        fnQuery = fnQuery + '.' + parsedData[ i+2 ].value;
+        var snippit = extractSnippit({ input: content, index: o.range[0], query: fnQuery });
+        console.log('library snippit', snippit);
+        resultsArr.push(snippit);
       }
     }
   }
