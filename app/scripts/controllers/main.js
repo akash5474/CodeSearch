@@ -6,6 +6,7 @@ angular.module('codeSearchApp')
     $scope.fileUrl = {url: ''};
     $scope.findLibrary = {library:''};
     $scope.findFunction = {libFunction:''};
+    $scope.pageArray = [];
 
     $scope.page = {
       currPage: 0,
@@ -42,6 +43,11 @@ angular.module('codeSearchApp')
         console.log(parsedData);
         $timeout(function(){
           $scope.codeSnippits = parsedData.snippits;
+          var pages = Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
+          for ( var i = 0; i < pages; i++ ) {
+            $scope.pageArray.push(i);
+          }
+          console.log(pages);
         }, 100);
       });
     };
