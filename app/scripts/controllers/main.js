@@ -44,10 +44,10 @@ angular.module('codeSearchApp')
         $timeout(function(){
           $scope.codeSnippits = parsedData.snippits;
           var pages = Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
+          $scope.pageArray = [];
           for ( var i = 0; i < pages; i++ ) {
             $scope.pageArray.push(i);
           }
-          console.log(pages);
         }, 100);
       });
     };
