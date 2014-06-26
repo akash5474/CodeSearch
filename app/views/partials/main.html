@@ -34,9 +34,8 @@
   <div ng-show="codeSnippits.length">
     <button ng-disabled="page.currPage === 0"
       ng-click="page.currPage = page.currPage-1" class="btn btn-info">Prev</button>
-
-    <span ng-repeat="num in pageArray | limitTo: 10">
-      <button ng-click="page.currPage = num" class="btn">{{num + 1}}</button>
+    <span ng-repeat="num in pageArray | paginateFrom:page.currPage | limitTo: 10">
+      <button ng-click="page.currPage = num" class="btn btn-default">{{num + 1}}</button>
     </span>
     <button
       ng-disabled="page.currPage >= codeSnippits.length / page.resultsPerPage - 1"
@@ -85,25 +84,6 @@
       </div><!-- /row -->
     </div><!-- /container -->
   </div><!-- /headerwrap -->
-
-  <div>
-    <h2>Display Results</h2>
-    <p>Results:</p>
-    <div class="snippit" ng-repeat='snippit in codeSnippits track by $index'>
-      <snippit snip="snippit"></snippit>
-    </div>
-  </div>
-
-  <div class="container">
-    <hr>
-    <div class="row centered">
-      <div class="col-lg-6 col-lg-offset-3">
-
-      </div>
-      <div class="col-lg-3"></div>
-    </div><!-- /row -->
-
-  </div><!-- /container -->
 
   <div class="container">
     <div class="row mt centered">
