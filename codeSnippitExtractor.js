@@ -9,7 +9,7 @@ var extractSnippit = function(result) {
   var startIndex = result.index;
   var endIndex;
   var fnQuery = result.query;
-  console.log('extractSnippit fnQuery', result.query, startIndex);
+  // console.log('extractSnippit fnQuery', result.query, startIndex);
 
 
   var bracketCounter = {
@@ -22,7 +22,7 @@ var extractSnippit = function(result) {
   };
 
   for ( var i = startIndex + fnQuery.length; i < content.length; i++ ) {
-    if ( i < 1750 ) console.log(content[i]);
+
     if ( content[i] in bracketCounter ) {
       bracketCounter[ content[i] ]++;
     }

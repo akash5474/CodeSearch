@@ -2,10 +2,20 @@
 
 angular.module('codeSearchApp')
   .controller('MainCtrl', function ($scope, $http, $timeout) {
-    $scope.codeSnippets = [];
+    $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
     $scope.findLibrary = {library:''};
     $scope.findFunction = {libFunction:''};
+    $scope.pageArray = [];
+
+    $scope.page = {
+      currPage: 0,
+      resultsPerPage: 2
+    };
+
+    $scope.getNumPages = function() {
+      return Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
+    };
 
     $scope.addFile = function () {
       $http.post('/api/addFile', $scope.fileUrl)
@@ -33,6 +43,11 @@ angular.module('codeSearchApp')
         console.log(parsedData);
         $timeout(function(){
           $scope.codeSnippits = parsedData.snippits;
+          var pages = Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
+          $scope.pageArray = [];
+          for ( var i = 0; i < pages; i++ ) {
+            $scope.pageArray.push(i);
+          }
         }, 100);
       });
     };
