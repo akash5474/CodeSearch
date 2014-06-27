@@ -1,5 +1,9 @@
 <div>
   <p>{{snippitObj.repoUrl}}</p>
-  <pre>{{snippitObj.docContent}}</pre>
+<!--   {{snippitObj.docContent | snippitHighlight:snippit}}
+ -->
+
+  <pre>{{preSnippitBody}}<span style="color: red;">{{snippitSubStr}}</span>{{postSnippitBody}}</pre>
+
 </div>
 <a style="color: black;" ng-click="ok()">&times;</a>
