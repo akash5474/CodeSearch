@@ -64,10 +64,10 @@ module.exports = function(content, fnQuery) {
           parsedData[ i+2 ].type === 'Identifier') {
 
         fnQuery = fnQueryPartOne + '.' + fnQueryPartTwo;
-        console.log('extracting snippit', {input: content, index: parsedData[ i ].range[0], query: fnQuery});
+        // console.log('extracting snippit', {input: content, index: parsedData[ i ].range[0], query: fnQuery});
         var snippit = extractSnippit({input: content, index: parsedData[ i ].range[0], query: fnQuery});
         resultsArr.push(snippit);
-        console.log('snippit', snippit);
+        // console.log('snippit', snippit);
       }
     }
   } else if ( !methodMatches ) {
@@ -81,7 +81,7 @@ module.exports = function(content, fnQuery) {
 
         fnQuery = parsedData[ i-2 ].value + '.' + fnQuery;
         var snippit = extractSnippit({ input: content, index: parsedData[ i-2 ].range[0], query: fnQuery });
-        console.log('method snippit', snippit);
+        // console.log('method snippit', snippit);
         resultsArr.push(snippit);
       } else if (o.type === 'Identifier' &&
                  o.value === fnQuery &&
@@ -91,7 +91,7 @@ module.exports = function(content, fnQuery) {
 
         fnQuery = fnQuery + '.' + parsedData[ i+2 ].value;
         var snippit = extractSnippit({ input: content, index: o.range[0], query: fnQuery });
-        console.log('library snippit', snippit);
+        // console.log('library snippit', snippit);
         resultsArr.push(snippit);
       }
     }
