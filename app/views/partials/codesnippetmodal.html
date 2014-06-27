@@ -1,8 +1,16 @@
 
   <div class="modal-header">
-    <p>{{snippitObj.repoUrl}}</p>
-    <button ng-click="goToSnippit()">Go To Snippit</button>
-    <button class="btn btn-small" ng-click="dismissModal()">X</button>
+    <div class="row">
+      <div class="col-lg-4">
+        {{snippitObj.repoUrl}}
+      </div>
+      <div class="col-lg-4 col-lg-offset-4">
+        <div class="pull-right">
+          <button ng-click="goToSnippit()">Go To Snippit</button>
+          <button class="btn btn-small" ng-click="dismissModal()">X</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="modal-body">
       <pre>{{preSnippitBody}}<span id="snip-highlight" style="color: red; background-color: yellow">{{snippitSubStr}}</span>{{postSnippitBody}}</pre>
