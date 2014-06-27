@@ -7,6 +7,8 @@ angular.module('codeSearchApp')
       $modalInstance.dismiss('cancel');
     };
 
-    $scope.snippitData = data.snippitData;
+    $scope.snippitObj = data.snippitObj;
+
+    $scope.snippit = data.snippitObj.snippit;
 
   });
