@@ -3,7 +3,8 @@
 <!--   {{snippitObj.docContent | snippitHighlight:snippit}}
  -->
 
-  <pre>{{preSnippitBody}}<span style="color: red; background-color: white">{{snippitSubStr}}</span>{{postSnippitBody}}</pre>
+  <pre>{{preSnippitBody}}<span id="snip-highlight" style="color: red; background-color: yellow">{{snippitSubStr}}</span>{{postSnippitBody}}</pre>
 
 </div>
-<a style="color: black;" ng-click="ok()">&times;</a>
+<!-- <button ng-click="goToSnippit()">Go To Snippit</button> -->
+<button class="btn btn-small" ng-click="dismissModal()">X</button>

@@ -14,10 +14,16 @@ angular.module('codeSearchApp')
   //         return $sce.trustAsHtml('<strong>HELLLLO</strong>');
   //       };
   // })
-  .controller('ModalCtrl', function ($scope, $http, $modalInstance, data) {
+  .controller('ModalCtrl', function ($scope, $http, $modalInstance, $location, $anchorScroll, $timeout, data) {
 
-    $scope.ok = function () {
+    $scope.dismissModal = function () {
       $modalInstance.dismiss('require');
+    };
+
+    $scope.goToSnippit = function() {
+      console.log('anchor scrolling!');
+      $location.hash('snip-highlight');
+      $anchorScroll();
     };
 
     $scope.snippitObj = data.snippitObj;
@@ -33,5 +39,6 @@ angular.module('codeSearchApp')
     $scope.preSnippitBody = content.substring(0, snippitStartIdx);
     $scope.postSnippitBody = content.substring(snippitEndIdx);
 
+    $timeout( $scope.goToSnippit, 200 );
   });
 
