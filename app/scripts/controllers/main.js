@@ -55,7 +55,7 @@ angular.module('codeSearchApp')
       });
     };
 
-    $scope.open = function(size, snippitObj) {
+    $scope.openModal = function(size, snippitObj) {
 
       var modalInstance = $modal.open({
         templateUrl: '/partials/codesnippetmodal',
