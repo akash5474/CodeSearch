@@ -91,7 +91,14 @@
   <div class="snippit" ng-repeat="snippitObj in codeSnippits |
                                   startPageFrom : page.currPage*page.resultsPerPage |
                                   limitTo : page.resultsPerPage track by $index">
-    <pre ng-click="openModal('lg', snippitObj)">{{snippitObj.snippit}}</pre>
+    <div class="row">
+      <pre class="col-md-11" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
+      <div class="col-md-1">
+      <i class="glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)"></i>
+      <i class="glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj)"></i>
+      <p ng-show="notSignedIn">Please sign in to vote</p>
+      </div>
+    </div>
   </div>
   <div>
     <button ng-disabled="page.currPage === 0"

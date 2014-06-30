@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .controller('MainCtrl', function ($scope, $http, $timeout, $modal, $log) {
+  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log) {
     $scope.isCollapsed = {collapse:false};
     $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
@@ -52,6 +52,29 @@ angular.module('codeSearchApp')
             $scope.pageArray.push(i);
           }
         }, 100);
+      });
+    };
+
+    $scope.tempId = 1234;
+
+    $scope.snippitVote = function(votePreference, snippitObj) {
+      // if (!$rootScope.currentUser) {
+      //   $scope.notSignedIn = true;
+      //   $timeout(function(){
+      //     $scope.notSignedIn = false;
+      //   }, 3000);
+      // }
+
+      var snippit = snippitObj.snippit;
+
+      var snippitData = {
+        snippit: snippit,
+        votePreference: votePreference
+      };
+      console.log(snippitData);
+      $http.post('/api/snippitVote', snippitData)
+      .success(function(data){
+        console.log(data);
       });
     };
 
