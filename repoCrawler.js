@@ -115,7 +115,7 @@ var cloneRepo = function(cloneUrl) {
   //     console.log('stdout: ' + stdout);
   //     console.log('stderr: ' + stderr);
   // }).catch(function(e) {
-  //    console.log('exec error: ' + e);
+  //     console.log('exec error: ' + e);
   // });
 };
 
@@ -126,7 +126,7 @@ var getCloneUrl = function(repoHref) {
 
   return reqProm(repoHref).spread(scrapeCloneUrl)
     .catch(function(err) {
-      console.log('ERROR requesting github', err);
+      console.log('ERROR requesting github', err, '\n', repoHref);
     });
 };
 
@@ -137,44 +137,44 @@ var getRepoUrl = function(pageLink) {
 
   return reqProm(pageLink).spread(scrapeRepoLink)
     .catch(function(err) {
-      console.log('Err requesting NPM Page', err);
+      console.log('Err requesting NPM Page', err, '\n', pageLink);
     });
 };
 
-var requestModuleDepended = function(dependedUrl) {
+var getDependingPage = function(dependedUrl) {
   return reqProm(dependedUrl).spread(scrapeDependedLinks)
     .spread(function(depLinks, nextPageLink) {
-      return Promise.resolve(depLinks)
+      Promise.resolve(depLinks)
         .map(getRepoUrl)
         .map(getCloneUrl)
         .map(cloneRepo, {concurrency: 5})
         .then(function() {
           if ( nextPageLink ) {
-            requestModuleDepended(nextPageLink);
+            getDependingPage(nextPageLink);
           }
         });
   });
 };
 
-var requestStarred = function(starredUrl) {
+var getStarredPage = function(starredUrl) {
   reqProm(starredUrl).spread(scrapeStarredLinks)
     .spread(function(repoLinks, nextLink) {
 
       return Promise.resolve(repoLinks)
-        .map(requestModuleDepended)
+        .each(getDependingPage)
         .then(function() {
           if (nextLink) {
-            console.log('requestStarred nextLink', nextLink);
-            requestStarred(nextLink);
+            console.log('getStarredPage nextLink', nextLink);
+            getStarredPage(nextLink);
           }
         })
         .catch(function(err) {
-          console.log('ERROR: requestStarred promise resolve', err);
+          console.log('ERROR: getStarredPage promise resolve', err);
         });
   })
   .catch(function(err) {
-    console.log('ERROR: requestStarred', err);
+    console.log('ERROR: getStarredPage', err);
   });
 };
 
-requestStarred(startUrl);
+getStarredPage(startUrl);
