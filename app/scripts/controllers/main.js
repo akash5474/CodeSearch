@@ -66,10 +66,12 @@ angular.module('codeSearchApp')
       // }
 
       var snippit = snippitObj.snippit;
+      var filePath = snippitObj.filePath;
 
       var snippitData = {
         snippit: snippit,
-        votePreference: votePreference
+        votePreference: votePreference,
+        filePath: filePath
       };
       console.log(snippitData);
       $http.post('/api/snippitVote', snippitData)
