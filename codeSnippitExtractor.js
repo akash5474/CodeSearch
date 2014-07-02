@@ -41,7 +41,7 @@ var extractSnippit = function(result) {
   if ( content[ startIndex + fnQuery.length ] !== '(' ) {
     return;
   } else {
-    console.log( content.substring(startIndex, endIndex + 1) );
+    // console.log( content.substring(startIndex, endIndex + 1) );
     return content.substring(startIndex, endIndex + 1);
   }
 };
