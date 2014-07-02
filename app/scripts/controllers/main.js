@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log) {
+  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log, apiRequest) {
     $scope.isCollapsed = {collapse:false};
     $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
@@ -33,37 +33,17 @@ angular.module('codeSearchApp')
     }
 
     $scope.findCode = function () {
-      $http({
-          method:'GET',
-          url:'/api/findFile',
-          params: {
-            library: $scope.findLibrary.library,
-            libFunction: $scope.findFunction.libFunction
-          }
-      })
-      .success(function(data){
-        var parsedData = angular.fromJson(data);
-        console.log(parsedData);
-        $timeout(function(){
-          $scope.codeSnippits = parsedData.snippits;
-          var pages = Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
-          $scope.pageArray = [];
-          for ( var i = 0; i < pages; i++ ) {
-            $scope.pageArray.push(i);
-          }
-        }, 100);
-      });
+     apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction).then(function(data){
+
+      $scope.codeSnippits = data.codeSnippits;
+      $scope.pageArray = data.pageArray;
+
+     })
     };
 
     $scope.tempId = 1234;
 
     $scope.snippitVote = function(votePreference, snippitObj) {
-      // if (!$rootScope.currentUser) {
-      //   $scope.notSignedIn = true;
-      //   $timeout(function(){
-      //     $scope.notSignedIn = false;
-      //   }, 3000);
-      // }
 
       var snippit = snippitObj.snippit;
       var filePath = snippitObj.filePath;
@@ -73,7 +53,7 @@ angular.module('codeSearchApp')
         votePreference: votePreference,
         filePath: filePath
       };
-      console.log(snippitData);
+
       $http.post('/api/snippitVote', snippitData)
       .success(function(data){
         console.log(data);
