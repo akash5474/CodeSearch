@@ -55,29 +55,60 @@ angular.module('codeSearchApp')
       });
     };
 
-    $scope.tempId = 1234;
-
     $scope.snippitVote = function(votePreference, snippitObj) {
-      // if (!$rootScope.currentUser) {
-      //   $scope.notSignedIn = true;
-      //   $timeout(function(){
-      //     $scope.notSignedIn = false;
-      //   }, 3000);
-      // }
+      if (!$rootScope.currentUser) {
+        $scope.notSignedIn = true;
+        $timeout(function(){
+          $scope.notSignedIn = false;
+        }, 3000);
+      } else {
 
-      var snippit = snippitObj.snippit;
-      var filePath = snippitObj.filePath;
+        var githubId = $rootScope.currentUser.github_id;
+        var indexPreSort = $scope.codeSnippits.indexOf(snippitObj);
+        var originalSnippitArray = $scope.codeSnippits[indexPreSort];
+        var snippitScore = originalSnippitArray.snippitScore;
+        var snippitVoterInfo = originalSnippitArray.snippitVoters;
 
-      var snippitData = {
-        snippit: snippit,
-        votePreference: votePreference,
-        filePath: filePath
-      };
-      console.log(snippitData);
-      $http.post('/api/snippitVote', snippitData)
-      .success(function(data){
-        console.log(data);
-      });
+        if (typeof snippitVoterInfo[githubId] === 'undefined') {
+          console.log('no vote: ', snippitVoterInfo[githubId]);
+          snippitVoterInfo[githubId] = 0;
+        }
+
+        originalSnippitArray.snippitScore += votePreference;
+        snippitVoterInfo[githubId] += votePreference;
+
+        console.log(snippitVoterInfo[githubId]);
+
+
+        // if (snippitVotersObj[githubId] === 1) {
+
+        // }
+
+        // if (votePreference = 1) {
+        //   $scope.codeSnippits[index].snippitScore++;
+        //   $scope.codeSnippits[index[upVote = true;
+        //   $scope.downVote = false;
+        // } else {
+        //   $scope.codeSnippits[index].snippitScore--;
+        //   $scope.upvote = false;
+        //   $scope.downVote = true;
+        // }
+
+
+        // var snippit = snippitObj.snippit;
+        // var filePath = snippitObj.filePath;
+
+        // var snippitData = {
+        //   snippit: snippit,
+        //   votePreference: votePreference,
+        //   filePath: filePath
+        // };
+        // console.log(snippitData);
+        // $http.post('/api/snippitVote', snippitData)
+        // .success(function(data){
+        //   console.log(data);
+        // });
+      }
     };
 
     $scope.openModal = function(size, snippitObj) {
