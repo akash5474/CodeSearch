@@ -44,20 +44,7 @@ angular.module('codeSearchApp')
     $scope.tempId = 1234;
 
     $scope.snippitVote = function(votePreference, snippitObj) {
-
-      var snippit = snippitObj.snippit;
-      var filePath = snippitObj.filePath;
-
-      var snippitData = {
-        snippit: snippit,
-        votePreference: votePreference,
-        filePath: filePath
-      };
-
-      $http.post('/api/snippitVote', snippitData)
-      .success(function(data){
-        console.log(data);
-      });
+      apiRequest.snippitVote(votePreference,snippitObj);
     };
 
     $scope.openModal = function(size, snippitObj) {
