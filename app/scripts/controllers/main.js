@@ -39,6 +39,7 @@ angular.module('codeSearchApp')
     }
 
     $scope.findCode = function () {
+
      $scope.$emit('LOAD');
      $scope.$apply();
      apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction).then(function(data){
@@ -50,10 +51,58 @@ angular.module('codeSearchApp')
      })
     };
 
-    $scope.tempId = 1234;
-
     $scope.snippitVote = function(votePreference, snippitObj) {
-      apiRequest.snippitVote(votePreference,snippitObj);
+// <<<<<<< HEAD
+//       apiRequest.snippitVote(votePreference,snippitObj);
+// =======
+
+        var indexPreSort = $scope.codeSnippits.indexOf(snippitObj);
+        var scopeSnippit = $scope.codeSnippits[indexPreSort];
+
+      if (!$rootScope.currentUser) {
+        scopeSnippit.notSignedIn = true;
+        $timeout(function(){
+          scopeSnippit.notSignedIn = false;
+        }, 3000);
+      } else {
+
+        var githubId = $rootScope.currentUser.github_id;
+        var snippitScore = scopeSnippit.snippitScore;
+        var snippitVoterInfo = scopeSnippit.snippitVoters;
+
+        if (snippitVoterInfo[githubId] === votePreference) {
+          scopeSnippit.duplicateVote = true;
+          $timeout(function(){
+            scopeSnippit.duplicateVote = false;
+          }, 3000);
+        } else {
+
+          if (typeof snippitVoterInfo[githubId] === 'undefined') {
+            console.log('no vote: ', snippitVoterInfo[githubId]);
+            snippitVoterInfo[githubId] = 0;
+          }
+
+          scopeSnippit.snippitScore += votePreference;
+          snippitVoterInfo[githubId] += votePreference;
+
+          console.log(snippitVoterInfo[githubId]);
+
+          var snippit = snippitObj.snippit;
+          var filePath = snippitObj.filePath;
+
+          var snippitData = {
+            snippit: snippit,
+            votePreference: snippitVoterInfo[githubId],
+            filePath: filePath
+          };
+          console.log(snippitData);
+          $http.post('/api/snippitVote', snippitData)
+          .success(function(data){
+            console.log(data);
+          });
+        }
+      }
+// >>>>>>> smeidan-master
     };
 
     $scope.openModal = function(size, snippitObj) {

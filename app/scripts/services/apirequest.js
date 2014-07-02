@@ -18,6 +18,16 @@ angular.module('codeSearchApp')
         }
       }).then(function(data){
         var parsedData = angular.fromJson(data);
+        parsedData.data.snippits.sort(function(a, b) {
+          if (a.snippitScore < b.snippitScore) {
+            return 1;
+          } else if (a.snippitScore > b.snippitScore) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+
         var snippitsReturned = {};
         snippitsReturned.codeSnippits = parsedData.data.snippits;
 
@@ -33,13 +43,13 @@ angular.module('codeSearchApp')
     }
 
 
-    apiRequest.snippitVote = function (vote, snippitObj) {
-      return $http.post('/api/snippitVote', {
-        snippit: snippitObj.snippit,
-        votePreference: vote,
-        filePath: snippitObj.filePath
-      });
-    }
+    // apiRequest.snippitVote = function (vote, snippitObj) {
+    //   return $http.post('/api/snippitVote', {
+    //     snippit: snippitObj.snippit,
+    //     votePreference: vote,
+    //     filePath: snippitObj.filePath
+    //   });
+    // }
 
 
     return apiRequest
