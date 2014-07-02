@@ -46,6 +46,7 @@
           <button type="submit" class="btn btn-lg btn-primary">Add File</button>
         </form>
         <button ng-click="testDirectorySearch()" class="btn btn-lg btn-danger">Test Directory Search</button> -->
+
         <div class="row">
           <form name="form" ng-submit="findCode()" novalidate>
             <div class="row">
@@ -73,7 +74,14 @@
     </div><!-- /row -->
   </div><!-- /container -->
 </div><!-- /headerwrap -->
-
+<p></p>
+<div class="spinner-wave" ng-show="loading">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
 <div ng-show="codeSnippits.length">
   <h3>Results:</h3>
   <div>
