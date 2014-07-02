@@ -48,10 +48,10 @@
         <button ng-click="testDirectorySearch()" class="btn btn-lg btn-danger">Test Directory Search</button> -->
 
         <div class="row">
-          <form name="form" ng-submit="findCode()" novalidate>
+          <form name="form" class='my-form' ng-submit="findCode()" novalidate>
             <div class="row">
               <div class="col-lg-4">
-                <label>Library</label>
+                <label>Node Library</label>
               </div>
               <div class="col-lg-4">
                 <label>Function</label>
@@ -59,13 +59,13 @@
             </div>
             <div class="row" id="search-form">
               <div class="col-lg-4">
-                <input type="text" name="lib" class="form-control" ng-model="findLibrary.library" required>
+                <input type="text" name="lib" class="lib form-control" ng-model="findLibrary.library" required>
               </div>
               <div class="col-lg-4">
-                <input type="text" name="func" class="form-control" ng-model="findFunction.libFunction" required>
+                <input type="text" name="func" class="func form-control" ng-model="findFunction.libFunction" required>
               </div>
               <div class="col-lg-4" id="search-btn">
-                <button type="submit" class="btn btn-lg btn-primary" ng-click="isCollapsed.collapse = true">Search</button>
+                <button type="submit" class="btn btn-lg btn-primary" ng-click="isCollapsed.collapse = true" ng-disabled='form.func.$error.required && form.lib.$error.required'>Search</button>
               </div>
             </div>
           </form>
