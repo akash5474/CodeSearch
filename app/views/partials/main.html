@@ -2,6 +2,7 @@
 <div ng-include="'partials/navbar'"></div>
 
 <!-- <div class="jumbotron">
+>>>>>>> upstream/master
   <div class="form-group">
     <form class="form" name="form" ng-submit="addFile()" novalidate>
       <label>URL</label>
@@ -40,12 +41,12 @@
       </div>
       <div class="col-lg-10 col-lg-offset-1">
 
-        <form class="form-inline" name="form" ng-submit="addFile()" novalidate>
+<!--         <form class="form-inline" name="form" ng-submit="addFile()" novalidate>
           <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
           <button type="submit" class="btn btn-lg btn-primary">Add File</button>
         </form>
-        <button ng-click="testDirectorySearch()" class="btn btn-lg btn-danger">Test Directory Search</button>
-        <a href="/auth/github" target="_self" class="btn btn-primary">Github Login</a>
+        <button ng-click="testDirectorySearch()" class="btn btn-lg btn-danger">Test Directory Search</button> -->
+
         <div class="row">
           <form name="form" ng-submit="findCode()" novalidate>
             <div class="row">
@@ -73,7 +74,14 @@
     </div><!-- /row -->
   </div><!-- /container -->
 </div><!-- /headerwrap -->
-
+<p></p>
+<div class="spinner-wave" ng-show="loading">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
 <div ng-show="codeSnippits.length">
   <h3>Results:</h3>
   <div>
@@ -93,11 +101,11 @@
                                   startPageFrom : page.currPage*page.resultsPerPage |
                                   limitTo : page.resultsPerPage track by $index">
     <div class="row">
-      <pre class="col-md-10" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
+      <pre class="col-md-10 change-cursor" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
       <div class="col-md-2">
-      <i class="glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj, $index)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === 1"></i>
+      <i class="glyphicon glyphicon-thumbs-up change-cursor" ng-click="snippitVote(1, snippitObj, $index)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === 1"></i>
       {{snippitObj.snippitScore}}
-      <i class="glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj, $index)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === -1"></i>
+      <i class="glyphicon glyphicon-thumbs-down change-cursor" ng-click="snippitVote(-1, snippitObj, $index)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === -1"></i>
       <p ng-show="notSignedIn">Please sign in to vote</p>
       </div>
     </div>
@@ -119,5 +127,4 @@
 <div class="footer">
   <p>♥ from aa.js</p>
 </div>
-
 

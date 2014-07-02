@@ -8,6 +8,12 @@ angular.module('codeSearchApp')
     $scope.findLibrary = {library:''};
     $scope.findFunction = {libFunction:''};
     $scope.pageArray = [];
+    $scope.$on('LOAD', function(){
+      $scope.loading=true
+    });
+    $scope.$on('UNLOAD', function(){
+      $scope.loading=false
+    });
 
     $scope.page = {
       currPage: 0,
@@ -33,6 +39,8 @@ angular.module('codeSearchApp')
     }
 
     $scope.findCode = function () {
+      $scope.$emit('LOAD');
+      $scope.$apply();
       $http({
           method:'GET',
           url:'/api/findFile',
@@ -51,6 +59,7 @@ angular.module('codeSearchApp')
           for ( var i = 0; i < pages; i++ ) {
             $scope.pageArray.push(i);
           }
+          $scope.$emit('UNLOAD');
         }, 100);
       });
     };
