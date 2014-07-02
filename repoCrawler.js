@@ -111,12 +111,12 @@ var cloneRepo = function(cloneUrl) {
     }
   }
 
-  // return execProm('git clone ' + cloneUrl ).spread(function(stdout, stderr) {
-  //     console.log('stdout: ' + stdout);
-  //     console.log('stderr: ' + stderr);
-  // }).catch(function(e) {
-  //     console.log('exec error: ' + e);
-  // });
+  return execProm('git clone ' + cloneUrl ).spread(function(stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+  }).catch(function(e) {
+      console.log('exec error: ' + e);
+  });
 };
 
 var getCloneUrl = function(repoHref) {
