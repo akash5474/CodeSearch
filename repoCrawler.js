@@ -162,7 +162,7 @@ var getDependingPage = function(dependedUrl) {
       Promise.resolve(depLinks)
         .map(getRepoUrl)
         .map(getCloneUrl)
-        .map(cloneRepo, {concurrency: 5})
+        .map(cloneRepo, {concurrency: 8})
         .then(function() {
           if ( nextPageLink ) {
             console.log(' > \033[35mSERVER:\033[39m GetDependedPage nextLink', nextLink);
