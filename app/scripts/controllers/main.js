@@ -8,6 +8,12 @@ angular.module('codeSearchApp')
     $scope.findLibrary = {library:''};
     $scope.findFunction = {libFunction:''};
     $scope.pageArray = [];
+    $scope.$on('LOAD', function(){
+      $scope.loading=true
+    });
+    $scope.$on('UNLOAD', function(){
+      $scope.loading=false
+    });
 
     $scope.page = {
       currPage: 0,
@@ -33,8 +39,11 @@ angular.module('codeSearchApp')
     }
 
     $scope.findCode = function () {
+     $scope.$emit('LOAD');
+     $scope.$apply();
      apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction).then(function(data){
 
+      $scope.loading = false;
       $scope.codeSnippits = data.codeSnippits;
       $scope.pageArray = data.pageArray;
 

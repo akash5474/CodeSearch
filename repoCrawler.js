@@ -1,9 +1,16 @@
 var cheerio = require('cheerio');
 var request = require('request');
+
 var exec = require('child_process').exec;
 var Promise = require("bluebird");
 var reqProm = Promise.promisify(request);
 var execProm = Promise.promisify(exec);
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+var config = require('./lib/config/config');
+var db = require('mongoose').connect(config.mongo.uri, config.mongo.options);
+
+var pushRepo = require('./lib/controllers/files').pushFileToDirectory;
 
 var npmURL = 'https://www.npmjs.org';
 var startUrl = 'https://www.npmjs.org/browse/star';
@@ -112,10 +119,17 @@ var cloneRepo = function(cloneUrl) {
   }
 
   return execProm('git clone ' + cloneUrl ).spread(function(stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-  }).catch(function(e) {
-      console.log('exec error: ' + e);
+      console.log('stdout:', stdout);
+      console.log('stderr:', stderr);
+      var moduleName = cloneUrl.substring( cloneUrl.lastIndexOf('/') + 1, cloneUrl.lastIndexOf('.git') );
+      var repoPath = process.cwd() + '/' + moduleName;
+      // return repoPath;
+      console.log([repoPath, cloneUrl.substring(0, cloneUrl.lastIndexOf('.git') ), moduleName]);
+      return [repoPath, cloneUrl, moduleName];
+  })
+  .spread(pushRepo)
+  .catch(function(e) {
+    console.log('exec error: ' + e);
   });
 };
 
@@ -142,12 +156,13 @@ var getRepoUrl = function(pageLink) {
 };
 
 var getDependingPage = function(dependedUrl) {
+  console.log('ge')
   return reqProm(dependedUrl).spread(scrapeDependedLinks)
     .spread(function(depLinks, nextPageLink) {
       Promise.resolve(depLinks)
         .map(getRepoUrl)
         .map(getCloneUrl)
-        .map(cloneRepo, {concurrency: 5})
+        .map(cloneRepo, {concurrency: 1})
         .then(function() {
           if ( nextPageLink ) {
             getDependingPage(nextPageLink);
