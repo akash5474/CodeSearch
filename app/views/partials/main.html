@@ -2,7 +2,6 @@
 <div ng-include="'partials/navbar'"></div>
 
 <!-- <div class="jumbotron">
->>>>>>> upstream/master
   <div class="form-group">
     <form class="form" name="form" ng-submit="addFile()" novalidate>
       <label>URL</label>
@@ -41,11 +40,12 @@
       </div>
       <div class="col-lg-10 col-lg-offset-1">
 
-<!--         <form class="form-inline" name="form" ng-submit="addFile()" novalidate>
+        <form class="form-inline" name="form" ng-submit="addFile()" novalidate>
           <input type="text" name="url" class="form-control" ng-model="fileUrl.url" required>
           <button type="submit" class="btn btn-lg btn-primary">Add File</button>
         </form>
-        <button ng-click="testDirectorySearch()" class="btn btn-lg btn-danger">Test Directory Search</button> -->
+        <button ng-click="testDirectorySearch()" class="btn btn-lg btn-danger">Test Directory Search</button>
+        <a href="/auth/github" target="_self" class="btn btn-primary">Github Login</a>
         <div class="row">
           <form name="form" class='my-form' ng-submit="findCode()" novalidate>
             <div class="row">
@@ -89,9 +89,18 @@
   </div>
   <br>
   <div class="snippit" ng-repeat="snippitObj in codeSnippits |
+                                  orderBy : '-snippitScore' |
                                   startPageFrom : page.currPage*page.resultsPerPage |
                                   limitTo : page.resultsPerPage track by $index">
-    <pre ng-click="openModal('lg', snippitObj)">{{snippitObj.snippit}}</pre>
+    <div class="row">
+      <pre class="col-md-10" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
+      <div class="col-md-2">
+      <i class="glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj, $index)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === 1"></i>
+      {{snippitObj.snippitScore}}
+      <i class="glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj, $index)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === -1"></i>
+      <p ng-show="notSignedIn">Please sign in to vote</p>
+      </div>
+    </div>
   </div>
   <div>
     <button ng-disabled="page.currPage === 0"
