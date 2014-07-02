@@ -43,9 +43,19 @@ angular.module('codeSearchApp')
       })
       .success(function(data){
         var parsedData = angular.fromJson(data);
-        console.log(parsedData);
+        console.log(parsedData.snippits);
+        parsedData.snippits.sort(function(a, b) {
+          if (a.snippitScore < b.snippitScore) {
+            return 1;
+          } else if (a.snippitScore > b.snippitScore) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
         $timeout(function(){
           $scope.codeSnippits = parsedData.snippits;
+          console.log($scope.codeSnippits);
           var pages = Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
           $scope.pageArray = [];
           for ( var i = 0; i < pages; i++ ) {
@@ -56,58 +66,52 @@ angular.module('codeSearchApp')
     };
 
     $scope.snippitVote = function(votePreference, snippitObj) {
+
+        var indexPreSort = $scope.codeSnippits.indexOf(snippitObj);
+        var scopeSnippit = $scope.codeSnippits[indexPreSort];
+
       if (!$rootScope.currentUser) {
-        $scope.notSignedIn = true;
+        scopeSnippit.notSignedIn = true;
         $timeout(function(){
-          $scope.notSignedIn = false;
+          scopeSnippit.notSignedIn = false;
         }, 3000);
       } else {
 
         var githubId = $rootScope.currentUser.github_id;
-        var indexPreSort = $scope.codeSnippits.indexOf(snippitObj);
-        var originalSnippitArray = $scope.codeSnippits[indexPreSort];
-        var snippitScore = originalSnippitArray.snippitScore;
-        var snippitVoterInfo = originalSnippitArray.snippitVoters;
+        var snippitScore = scopeSnippit.snippitScore;
+        var snippitVoterInfo = scopeSnippit.snippitVoters;
 
-        if (typeof snippitVoterInfo[githubId] === 'undefined') {
-          console.log('no vote: ', snippitVoterInfo[githubId]);
-          snippitVoterInfo[githubId] = 0;
+        if (snippitVoterInfo[githubId] === votePreference) {
+          scopeSnippit.duplicateVote = true;
+          $timeout(function(){
+            scopeSnippit.duplicateVote = false;
+          }, 3000);
+        } else {
+
+          if (typeof snippitVoterInfo[githubId] === 'undefined') {
+            console.log('no vote: ', snippitVoterInfo[githubId]);
+            snippitVoterInfo[githubId] = 0;
+          }
+
+          scopeSnippit.snippitScore += votePreference;
+          snippitVoterInfo[githubId] += votePreference;
+
+          console.log(snippitVoterInfo[githubId]);
+
+          var snippit = snippitObj.snippit;
+          var filePath = snippitObj.filePath;
+
+          var snippitData = {
+            snippit: snippit,
+            votePreference: votePreference,
+            filePath: filePath
+          };
+          console.log(snippitData);
+          $http.post('/api/snippitVote', snippitData)
+          .success(function(data){
+            console.log(data);
+          });
         }
-
-        originalSnippitArray.snippitScore += votePreference;
-        snippitVoterInfo[githubId] += votePreference;
-
-        console.log(snippitVoterInfo[githubId]);
-
-
-        // if (snippitVotersObj[githubId] === 1) {
-
-        // }
-
-        // if (votePreference = 1) {
-        //   $scope.codeSnippits[index].snippitScore++;
-        //   $scope.codeSnippits[index[upVote = true;
-        //   $scope.downVote = false;
-        // } else {
-        //   $scope.codeSnippits[index].snippitScore--;
-        //   $scope.upvote = false;
-        //   $scope.downVote = true;
-        // }
-
-
-        // var snippit = snippitObj.snippit;
-        // var filePath = snippitObj.filePath;
-
-        // var snippitData = {
-        //   snippit: snippit,
-        //   votePreference: votePreference,
-        //   filePath: filePath
-        // };
-        // console.log(snippitData);
-        // $http.post('/api/snippitVote', snippitData)
-        // .success(function(data){
-        //   console.log(data);
-        // });
       }
     };
 

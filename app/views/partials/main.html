@@ -89,19 +89,16 @@
   </div>
   <br>
   <div class="snippit" ng-repeat="snippitObj in codeSnippits |
-                                  orderBy : '-snippitScore' |
                                   startPageFrom : page.currPage*page.resultsPerPage |
                                   limitTo : page.resultsPerPage track by $index">
     <div class="row">
       <pre class="col-md-10" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
       <div class="col-md-2">
-<!--       <i class="glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === 1"></i>
-      {{snippitObj.snippitScore}}
-      <i class="glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj)" ng-hide="snippitObj.snippitVoters[currentUser.github_id] === -1"></i>
- -->      <i class="glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)"></i>
+      <i class="glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)"></i>
       {{snippitObj.snippitScore}}
       <i class="glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj)"></i>
-      <p ng-show="notSignedIn">Please sign in to vote</p>
+      <p ng-show="snippitObj.notSignedIn">Please sign in to vote</p>
+      <p ng-show="snippitObj.duplicateVote">Already voted on this</p>
       </div>
     </div>
   </div>
