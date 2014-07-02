@@ -156,15 +156,16 @@ var getRepoUrl = function(pageLink) {
 };
 
 var getDependingPage = function(dependedUrl) {
-  console.log('ge')
+
   return reqProm(dependedUrl).spread(scrapeDependedLinks)
     .spread(function(depLinks, nextPageLink) {
       Promise.resolve(depLinks)
         .map(getRepoUrl)
         .map(getCloneUrl)
-        .map(cloneRepo, {concurrency: 1})
+        .map(cloneRepo, {concurrency: 5})
         .then(function() {
           if ( nextPageLink ) {
+            console.log(' > \033[35mSERVER:\033[39m GetDependedPage nextLink', nextLink);
             getDependingPage(nextPageLink);
           }
         });
@@ -179,7 +180,7 @@ var getStarredPage = function(starredUrl) {
         .each(getDependingPage)
         .then(function() {
           if (nextLink) {
-            console.log('getStarredPage nextLink', nextLink);
+            console.log(' > \033[35mSERVER:\033[39m GetStarredPage nextLink', nextLink);
             getStarredPage(nextLink);
           }
         })
