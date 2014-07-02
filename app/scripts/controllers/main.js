@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .controller('MainCtrl', function ($scope, $http, $timeout, $modal, $log) {
+  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log) {
     $scope.isCollapsed = {collapse:false};
     $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
@@ -55,6 +55,31 @@ angular.module('codeSearchApp')
       });
     };
 
+    $scope.tempId = 1234;
+
+    $scope.snippitVote = function(votePreference, snippitObj) {
+      // if (!$rootScope.currentUser) {
+      //   $scope.notSignedIn = true;
+      //   $timeout(function(){
+      //     $scope.notSignedIn = false;
+      //   }, 3000);
+      // }
+
+      var snippit = snippitObj.snippit;
+      var filePath = snippitObj.filePath;
+
+      var snippitData = {
+        snippit: snippit,
+        votePreference: votePreference,
+        filePath: filePath
+      };
+      console.log(snippitData);
+      $http.post('/api/snippitVote', snippitData)
+      .success(function(data){
+        console.log(data);
+      });
+    };
+
     $scope.openModal = function(size, snippitObj) {
 
       var modalInstance = $modal.open({
@@ -72,6 +97,7 @@ angular.module('codeSearchApp')
 
       modalInstance.result.then(function(selectedItem) {
         $scope.selected = selectedItem;
+
       }, function() {
         $log.info('Modal dismissed at: ' + new Date());
       });

@@ -251,3 +251,20 @@ div.snippit pre:hover {
 #search-form {
   padding-bottom: 10px;
 }
+
+.modal-content {
+  height: 700px;
+}
+
+.modal-body {
+  height: 80%;
+  overflow-y: auto;
+}
+
+.modal-header {
+  height: 10%;
+}
+
+.modal-footer {
+  height: 10%;
+}

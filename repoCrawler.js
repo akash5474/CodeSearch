@@ -113,6 +113,7 @@ var cloneRepo = function(cloneUrl) {
   }
 
   return execProm('git clone ' + cloneUrl ).spread(function(stdout, stderr) {
+// <<<<<<< HEAD
       console.log('stdout:', stdout);
       console.log('stderr:', stderr);
       var moduleName = cloneUrl.substring( cloneUrl.lastIndexOf('/') + 1, cloneUrl.lastIndexOf('.git') );
@@ -123,6 +124,11 @@ var cloneRepo = function(cloneUrl) {
   })
   .spread(pushRepo)
   .catch(function(e) {
+// =======
+//       console.log('stdout: ' + stdout);
+//       console.log('stderr: ' + stderr);
+//   }).catch(function(e) {
+// >>>>>>> master
       console.log('exec error: ' + e);
   });
 };
