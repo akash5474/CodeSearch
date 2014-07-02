@@ -257,12 +257,12 @@ div.snippit pre:hover {
 }
 
 .modal-body {
-  height: 80%;
+  height: 75%;
   overflow-y: auto;
 }
 
 .modal-header {
-  height: 10%;
+  height: 15%;
 }
 
 .modal-footer {
@@ -324,3 +324,4 @@ div.snippit pre:hover {
     0%, 40%, 100% { transform: scaleY(0.4); }
     20% { transform: scaleY(1.0); }
 }
+
