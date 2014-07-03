@@ -50,6 +50,7 @@ var extractSnippit = function(result) {
 module.exports = function(content, fnQuery, searchOptions) {
   var resultsArr = [];
   var parsedData = esprima.tokenize(content, {range: true});
+
   var methodMatches = fnQuery.match(/\./g);
   // console.log('fnQuery', fnQuery);
 
@@ -63,7 +64,8 @@ module.exports = function(content, fnQuery, searchOptions) {
 
     for (var i = 0; i <parsedData.length; i++) {
       var o = parsedData[i];
-      if (o.type === 'Identifier' &&
+      if (parsedData[ i+1 ] && parsedData[ i+2 ] &&
+          o.type === 'Identifier' &&
           o.value === fnQueryPartOne &&
           parsedData[ i+1 ].value === '.' &&
           parsedData[ i+1 ].type === 'Punctuator' &&
@@ -98,7 +100,8 @@ module.exports = function(content, fnQuery, searchOptions) {
         if (snippit) {
           resultsArr.push(snippit);
         }
-      } else if (searchOptions.library === true &&
+      } else if (parsedData[ i+1 ] && parsedData[ i+2 ] &&
+                 searchOptions.library === true &&
                  searchOptions.func === false &&
                  o.type === 'Identifier' &&
                  o.value === fnQuery &&

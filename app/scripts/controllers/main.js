@@ -41,7 +41,6 @@ angular.module('codeSearchApp')
     $scope.findCode = function () {
 
      $scope.$emit('LOAD');
-     $scope.$apply();
      apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction).then(function(data){
 
       $scope.loading = false;

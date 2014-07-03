@@ -7,7 +7,7 @@ angular.module('codeSearchApp')
 
     $scope.login = function(form) {
       $scope.submitted = true;
-      
+
       if(form.$valid) {
         Auth.login({
           email: $scope.user.email,
@@ -15,6 +15,8 @@ angular.module('codeSearchApp')
         })
         .then( function() {
           // Logged in, redirect to home
+          console.log('TRYING LOGIN');
+          $rootscope.currentUser = Auth.currentUser();
           $location.path('/');
         })
         .catch( function(err) {

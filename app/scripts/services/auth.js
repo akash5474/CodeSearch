@@ -5,7 +5,7 @@ angular.module('codeSearchApp')
 
     // Get currentUser from cookie
     $rootScope.currentUser = $cookieStore.get('user') || null;
-    // $cookieStore.remove('user');
+    $cookieStore.remove('user');
 
     return {
 
