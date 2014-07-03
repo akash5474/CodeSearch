@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log, apiRequest) {
+  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log, apiRequest, Auth) {
     $scope.isCollapsed = {collapse:false};
     $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
