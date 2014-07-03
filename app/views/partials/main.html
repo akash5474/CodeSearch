@@ -1,6 +1,5 @@
 
 <div ng-include="'partials/navbar'"></div>
-{{currentUser}}
 <!-- <div class="jumbotron">
 >>>>>>> upstream/master
   <div class="form-group">
@@ -102,9 +101,9 @@
     <div class="row">
       <pre class="col-md-10 change-cursor" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
       <div class="col-md-2">
-      <i class="glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)"></i>
+      <i class="change-cursor glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)"></i>
       {{snippitObj.snippitScore}}
-      <i class="glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj)"></i>
+      <i class="change-cursor glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj)"></i>
       <p ng-show="snippitObj.notSignedIn">Please sign in to vote</p>
       <p ng-show="snippitObj.duplicateVote">Already voted on this</p>
       </div>
