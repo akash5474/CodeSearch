@@ -42,7 +42,12 @@ var scrapeRepoLink = function(response, body) {
       return repoUrlSubstring === '.git';
 
     }).each(function() {
-      repoLink = $(this).attr('href');
+      link = $(this).attr('href');
+      if ( link.substring(0, 6) === 'git://' ) {
+         repoLink = link.replace(/git\:\/\//, 'http://');
+      } else {
+        repoLink = link;
+      }
     });
 
     return repoLink;
@@ -165,7 +170,7 @@ var getDependingPage = function(dependedUrl) {
         .map(cloneRepo, {concurrency: 8})
         .then(function() {
           if ( nextPageLink ) {
-            console.log(' > \033[35mSERVER:\033[39m GetDependedPage nextLink', nextLink);
+            console.log(' > \033[35mSERVER:\033[39m GetDependedPage nextLink', nextPageLink);
             getDependingPage(nextPageLink);
           }
         });
