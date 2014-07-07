@@ -8,13 +8,14 @@
       </button>
       <a class="navbar-brand" href="#"><b>SnipSnap</b></a>
     </div>
+
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
         <a ng-href="{{item.link}}">{{item.title}}</a>
         </li>
         <li ng-show="currentUser" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()">Logout</a></li>
-        <li ng-hide="currentUser" ng-class="{active: isActive('/logout')}"><a href="/auth/github" target="_self">Login</a>
+        <li ng-hide="currentUser" ng-class="{active: isActive('/logout')}"><a class='loginlink' href="/auth/github" target="_self"><img class="cat" src="../../images/GitHubLog.png"  target="_self"></a></li>
         <li class="profilepic"><img class="rounded-image" ng-if="currentUser.profile_picture" ng-src="{{currentUser.profile_picture}}"></li>
       </ul>
     </div><!--/.nav-collapse -->

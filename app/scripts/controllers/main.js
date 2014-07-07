@@ -19,7 +19,6 @@ angular.module('codeSearchApp')
       currPage: 0,
       resultsPerPage: 10
     };
-
     $scope.getNumPages = function() {
       return Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
     };
@@ -46,6 +45,7 @@ angular.module('codeSearchApp')
       $scope.loading = false;
       $scope.codeSnippits = data.codeSnippits;
       $scope.pageArray = data.pageArray;
+      console.log($scope.codeSnippits[1].snippitVoters[$rootScope.currentUser.github_id])
 
      })
     };

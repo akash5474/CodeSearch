@@ -37,6 +37,7 @@
     <div class="row">
       <div collapse="isCollapsed.collapse">
           <h1 class='col-lg-offset-1'>Find Example Code Snippets in a Snap</h1>
+          <h4 class='col-lg-offset-1'> Search for JavaScript code examples by selecting Node.js libraries OR basic JavaScript functions!</h4>
       </div>
       <div class="col-lg-10 col-lg-offset-1">
 
@@ -101,9 +102,9 @@
     <div class="row">
       <pre class="col-md-10 change-cursor" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
       <div class="col-md-2">
-      <i class="change-cursor glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)"></i>
+      <i class="change-cursor glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)" ng-class='{votepick: snippitObj.snippitVoters[currentUser.github_id] === 1}'></i>
       {{snippitObj.snippitScore}}
-      <i class="change-cursor glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj)"></i>
+      <i class="change-cursor glyphicon glyphicon-thumbs-down" ng-click="snippitVote(-1, snippitObj)" ng-class="{votepick: snippitObj.snippitVoters[currentUser.github_id] === -1}"></i>
       <p ng-show="snippitObj.notSignedIn">Please sign in to vote</p>
       <p ng-show="snippitObj.duplicateVote">Already voted on this</p>
       </div>
