@@ -6,8 +6,8 @@ angular.module('codeSearchApp')
 
     var searchOptions;
     var searchQuery;
-    var library;
-    var libFunction;
+    var library = "";
+    var libFunction = "";
 
     var getDepVar = function(lib, file) {
       var parsedData = esprima.tokenize(file);
