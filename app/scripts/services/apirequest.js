@@ -11,6 +11,7 @@ angular.module('codeSearchApp')
     var searchQuery;
     var library;
     var libFunction;
+    var returnSnips;
 
     var getDepVar = function(lib, file) {
       var parsedData = esprima.tokenize(file);
@@ -89,44 +90,58 @@ angular.module('codeSearchApp')
         console.log('sOpts', searchOptions);
         console.log('sQuer', searchQuery);
 
+        var snippitsToReturn = [];
+
         async.map(files, snippIterator, function(err, snippitsArr) {
           snippitsArr = _.flatten(snippitsArr);
           console.log('done iterating through snippits', snippitsArr.length);
           console.log(snippitsArr);
           console.log('populating snippit ids');
 
-          var snipPaths = _.pluck(snippitsArr, 'filePath');
-
-          $http.post('/api/popSnips', {snipPaths: snipPaths})
-          .then(function(data) {
-
+          var popData = snippitsArr.forEach(function(el) {
+            snippitsToReturn.push({
+              snippit: el.snippit,
+              filePath: el.filePath
+            });
           });
         });
+
+        return snippitsToReturn;
       })
-      // .then(function(data){
-      //   var parsedData = angular.fromJson(data);
-      //   parsedData.data.snippits.sort(function(a, b) {
-      //     if (a.snippitScore < b.snippitScore) {
-      //       return 1;
-      //     } else if (a.snippitScore > b.snippitScore) {
-      //       return -1;
-      //     } else {
-      //       return 0;
-      //     }
-      //   });
+      .then(function(snippitsToReturn) {
+        return $http.post('/api/popSnips', {data: snippitsToReturn})
+        .then(function(data){
+          var parsedData = angular.fromJson(data);
+          parsedData.data.snippits.sort(function(a, b) {
+            if (a.snippitScore < b.snippitScore) {
+              return 1;
+            } else if (a.snippitScore > b.snippitScore) {
+              return -1;
+            } else {
+              return 0;
+            }
+          });
 
-      //   var snippitsReturned = {};
-      //   snippitsReturned.codeSnippits = parsedData.data.snippits;
+          var snippitsReturned = {};
+          snippitsReturned.codeSnippits = parsedData.data.snippits;
 
-      //   var pages = Math.ceil(snippitsReturned.codeSnippits.length / 10 );
-      //   snippitsReturned.pageArray = [];
+          var pages = Math.ceil(snippitsReturned.codeSnippits.length / 10 );
+          snippitsReturned.pageArray = [];
 
-      //   for ( var i = 0; i < pages; i++ ) {
-      //     snippitsReturned.pageArray.push(i);
-      //   }
+          for ( var i = 0; i < pages; i++ ) {
+            snippitsReturned.pageArray.push(i);
+          }
 
-      //   return snippitsReturned
-      // })
+          console.log(snippitsReturned);
+
+          // returnSnips = snippitsReturned;
+
+          return snippitsReturned
+        });
+        console.log('returning');
+        console.log(data);
+        return data;
+      });
     }
 
     return apiRequest
