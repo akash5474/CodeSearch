@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log, apiRequest, Auth) {
+  .controller('MainCtrl', function ($rootScope, $scope, $http, $timeout, $modal, $log, apiRequest, Auth, codeParser) {
     $scope.isCollapsed = {collapse:false};
     $scope.codeSnippits = [];
     $scope.fileUrl = {url: ''};
@@ -19,6 +19,7 @@ angular.module('codeSearchApp')
       currPage: 0,
       resultsPerPage: 10
     };
+
     $scope.getNumPages = function() {
       return Math.ceil( $scope.codeSnippits.length / $scope.page.resultsPerPage );
     };

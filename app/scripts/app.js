@@ -29,6 +29,10 @@ angular.module('codeSearchApp', [
       .when('/about', {
         templateUrl: 'partials/about',
       })
+      .when('/popSnips', {
+        templateUrl: 'partials/popsnips',
+        controller: 'PopsnipsCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
