@@ -86,29 +86,50 @@ angular.module('codeSearchApp')
         console.log('sOpts', searchOptions);
         console.log('sQuer', searchQuery);
 
-        var snippitsToReturn = [];
+        var snippitPaths = [];
+        var snippitsArray;
 
         async.map(files, snippIterator, function(err, snippitsArr) {
           snippitsArr = _.flatten(snippitsArr);
           console.log('done iterating through snippits', snippitsArr.length);
-          console.log(snippitsArr);
           console.log('populating snippit ids');
 
-          var popData = snippitsArr.forEach(function(el) {
-            snippitsToReturn.push({
-              snippit: el.snippit,
+          snippitsArr.forEach(function(el) {
+            snippitPaths.push({
               filePath: el.filePath
             });
           });
+          snippitsArray = snippitsArr;
         });
 
-        return snippitsToReturn;
+        return [snippitsArray, snippitPaths];
       })
-      .then(function(snippitsToReturn) {
-        return $http.post('/api/popSnips', {data: snippitsToReturn})
-        .then(function(data){
+      .then(function(results) {
+        return $http.post('/api/popSnips',
+          {data: results[1]})
+        .then(function(data) {
           var parsedData = angular.fromJson(data);
-          parsedData.data.snippits.sort(function(a, b) {
+          var popSnippits = parsedData.data.snippits;
+          var snippitsArr = results[0];
+
+          for ( var i = 0; i < popSnippits.length; i++ ) {
+            if ( popSnippits[i].pops &&
+                 popSnippits[i].pops.length > 0 ) {
+
+              for (var j = 0; j < popSnippits[i].pops.length; j++) {
+                if (snippitsArr[i].snippit === popSnippits[i].pops[j].snippit) {
+                  snippitsArr[i].snippitScore = popSnippits[i].pops[j].score;
+                  snippitsArr[i].snippitVoters = popSnippits[i].pops[j].github_id;
+                }
+              }
+
+            } else {
+              snippitsArr[i].snippitScore = 0;
+              snippitsArr[i].snippitVoters = {};
+            }
+          }
+
+          snippitsArr.sort(function(a, b) {
             if (a.snippitScore < b.snippitScore) {
               return 1;
             } else if (a.snippitScore > b.snippitScore) {
@@ -119,7 +140,7 @@ angular.module('codeSearchApp')
           });
 
           var snippitsReturned = {};
-          snippitsReturned.codeSnippits = parsedData.data.snippits;
+          snippitsReturned.codeSnippits = snippitsArr;
 
           var pages = Math.ceil(snippitsReturned.codeSnippits.length / 10 );
           snippitsReturned.pageArray = [];
@@ -130,9 +151,9 @@ angular.module('codeSearchApp')
 
           return snippitsReturned
         });
-        return data;
+
       });
-    }
+    };
 
     return apiRequest
 
