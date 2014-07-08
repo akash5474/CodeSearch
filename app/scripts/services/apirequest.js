@@ -2,11 +2,8 @@
 
 angular.module('codeSearchApp')
   .factory('apiRequest', function ($http, $timeout, codeParser) {
-    // Service logic
-    // ...
     var apiRequest = {};
 
-    // Public API here
     var searchOptions;
     var searchQuery;
     var library;
