@@ -100,7 +100,8 @@
                                   startPageFrom : page.currPage*page.resultsPerPage |
                                   limitTo : page.resultsPerPage track by $index">
     <div class="row">
-      <pre class="col-md-10 change-cursor" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
+      <!-- <pre><code>{{snippitObj.snippit}}</code></pre> -->
+      <pre class="col-md-10 change-cursor" ng-click="openModal('lg', snippitObj)"><code>{{snippitObj.snippit}}</code></pre>
       <div class="col-md-2">
       <i class="change-cursor glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)" ng-class='{votepick: snippitObj.snippitVoters[currentUser.github_id] === 1}'></i>
       {{snippitObj.snippitScore}}

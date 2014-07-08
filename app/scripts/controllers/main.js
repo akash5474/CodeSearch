@@ -39,21 +39,18 @@ angular.module('codeSearchApp')
 
     $scope.findCode = function () {
 
-     $scope.$emit('LOAD');
-     apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction).then(function(data){
+      $scope.$emit('LOAD');
+      apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction)
+      .then(function(data){
 
-      $scope.loading = false;
-      $scope.codeSnippits = data.codeSnippits;
-      $scope.pageArray = data.pageArray;
-      console.log($scope.codeSnippits[1].snippitVoters[$rootScope.currentUser.github_id])
-
-     })
+        $scope.loading = false;
+        $scope.codeSnippits = data.codeSnippits;
+        $scope.pageArray = data.pageArray;
+        // console.log($scope.codeSnippits[1].snippitVoters[$rootScope.currentUser.github_id]);
+      })
     };
 
     $scope.snippitVote = function(votePreference, snippitObj) {
-// <<<<<<< HEAD
-//       apiRequest.snippitVote(votePreference,snippitObj);
-// =======
 
         var indexPreSort = $scope.codeSnippits.indexOf(snippitObj);
         var scopeSnippit = $scope.codeSnippits[indexPreSort];
@@ -101,7 +98,6 @@ angular.module('codeSearchApp')
           });
         }
       }
-// >>>>>>> smeidan-master
     };
 
     $scope.openModal = function(size, snippitObj) {
