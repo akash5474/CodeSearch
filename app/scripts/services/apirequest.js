@@ -11,7 +11,6 @@ angular.module('codeSearchApp')
     var searchQuery;
     var library;
     var libFunction;
-    var returnSnips;
 
     var getDepVar = function(lib, file) {
       var parsedData = esprima.tokenize(file);
@@ -132,14 +131,8 @@ angular.module('codeSearchApp')
             snippitsReturned.pageArray.push(i);
           }
 
-          console.log(snippitsReturned);
-
-          // returnSnips = snippitsReturned;
-
           return snippitsReturned
         });
-        console.log('returning');
-        console.log(data);
         return data;
       });
     }
