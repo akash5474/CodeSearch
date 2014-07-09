@@ -40,14 +40,12 @@ angular.module('codeSearchApp')
 
     $scope.findCode = function () {
 
-      $scope.$emit('LOAD');
-      apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction)
-      .then(function(data){
+     $scope.$emit('LOAD');
+     apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction).then(function(data) {
 
         $scope.loading = false;
         $scope.codeSnippits = data.codeSnippits;
         $scope.pageArray = data.pageArray;
-        // console.log($scope.codeSnippits[1].snippitVoters[$rootScope.currentUser.github_id]);
       })
     };
 

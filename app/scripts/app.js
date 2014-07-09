@@ -5,7 +5,8 @@ angular.module('codeSearchApp', [
   'ngResource',
   'ngSanitize',
   'ui.bootstrap',
-  'ngRoute'
+  'ngRoute',
+  'hljs'
 ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider

@@ -24,6 +24,10 @@ angular.module('codeSearchApp')
       console.log('anchor scrolling!');
       $location.hash('snip-highlight');
       $anchorScroll();
+      $timeout(function(){
+        hljs.initHighlighting();
+      });
+      console.log('test')
     };
 
     $scope.snippitObj = data.snippitObj;
@@ -39,6 +43,9 @@ angular.module('codeSearchApp')
     $scope.preSnippitBody = content.substring(0, snippitStartIdx);
     $scope.postSnippitBody = content.substring(snippitEndIdx);
 
-    $timeout( $scope.goToSnippit, 200 );
+    $timeout( function(){
+      $scope.goToSnippit()
+    }, 200 );
+
   });
 

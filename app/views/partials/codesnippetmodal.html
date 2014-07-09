@@ -12,9 +12,9 @@
       </div>
     </div>
   </div>
-  <div class="modal-body">
-      <pre>{{preSnippitBody}}<span id="snip-highlight" style="color: red; background-color: yellow">{{snippitSubStr}}</span>{{postSnippitBody}}</pre>
-  </div>
+ <div class="modal-body">
+     <span hljs source="preSnippitBody"></span><span id="snip-highlight" hljs source="snippitSubStr"></span><span hljs source="postSnippitBody">{{postSnippitBody}}</span>
+ </div>
   <div class="modal-footer">
     <button class="btn btn-small pull-right" ng-click="dismissModal()">X</button>
   </div>
