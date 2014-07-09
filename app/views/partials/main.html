@@ -1,5 +1,7 @@
 
 <div ng-include="'partials/navbar'"></div>
+
+
 <!-- <div class="jumbotron">
 >>>>>>> upstream/master
   <div class="form-group">
@@ -95,12 +97,13 @@
       ng-click="page.currPage = page.currPage+1" class="btn btn-info">Next</button>
     {{page.currPage + 1}} / {{ getNumPages() }}
   </div>
+
   <br>
   <div class="snippit" ng-repeat="snippitObj in codeSnippits |
                                   startPageFrom : page.currPage*page.resultsPerPage |
                                   limitTo : page.resultsPerPage track by $index">
     <div class="row">
-      <pre class="col-md-10 change-cursor" ng-click="openModal('lg', snippitObj)" >{{snippitObj.snippit}}</pre>
+      <div class="col-md-10" ng-click="openModal('lg', snippitObj)" hljs source='snippitObj.snippit' language='javascript'></div>
       <div class="col-md-2">
       <i class="change-cursor glyphicon glyphicon-thumbs-up" ng-click="snippitVote(1, snippitObj)" ng-class='{votepick: snippitObj.snippitVoters[currentUser.github_id] === 1}'></i>
       {{snippitObj.snippitScore}}
@@ -127,4 +130,5 @@
 <div class="footer">
   <p>♥ from aa.js</p>
 </div>
+
 
