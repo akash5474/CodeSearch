@@ -42,7 +42,10 @@ angular.module('codeSearchApp')
       var snippitRatings = doc.snippitRatings ?
                             doc.snippitRatings[libFunction] : {};
 
+      // Get variable assigned to dependency
+
       var dep;
+
       if ( library.length > 0 && libFunction.length > 0 ) {
         dep = getDepVar( library, docContent );
 
@@ -51,7 +54,11 @@ angular.module('codeSearchApp')
         }
       }
 
+      // Extract the snippit using code Parser
+
       var snippit = codeParser(docContent, searchQuery, searchOptions);
+
+      // Restructuring snippits into objects with pertinant info
 
       var resultsArr = [];
       snippit.forEach(function(snippit) {
@@ -94,6 +101,8 @@ angular.module('codeSearchApp')
         console.log('sQuer', searchQuery);
         // console.log($rootScope.statusMsg.msg);
 
+        // Sort files by Mongo Textsearch Score
+
         allFiles.sort(function(a, b) {
           if (a.score < b.score) {
             return 1;
@@ -108,15 +117,21 @@ angular.module('codeSearchApp')
 
         var end = allFiles.length <= maxFiles ? allFiles.length : maxFiles;
 
+        // Removing lowest scored files
+
         var files = allFiles.slice(0, end);
 
         var snippitPaths = [];
         var snippitsArray;
 
+        // Parse each file into snippets with Esprima
+
         async.map(files, snippIterator, function(err, snippitsArr) {
           snippitsArr = _.flatten(snippitsArr);
           console.log('done iterating through snippits', snippitsArr.length);
           console.log('populating snippit ids');
+
+          // Get file paths of all snippets into an array
 
           snippitsArr.forEach(function(el) {
             snippitPaths.push({
@@ -137,6 +152,9 @@ angular.module('codeSearchApp')
           var popSnippits = parsedData.data.snippits;
           var snippitsArr = results[0];
 
+          // Iterate through snippets to assign scores or assign
+          // a score of 0 if they have no votes
+
           for ( var i = 0; i < popSnippits.length; i++ ) {
             if ( popSnippits[i].pops &&
                  popSnippits[i].pops.length > 0 ) {
@@ -153,6 +171,8 @@ angular.module('codeSearchApp')
               snippitsArr[i].snippitVoters = {};
             }
           }
+
+          // Sort based on voting score
 
           snippitsArr.sort(function(a, b) {
             if (a.snippitScore < b.snippitScore) {

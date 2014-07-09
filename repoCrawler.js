@@ -16,6 +16,8 @@ var npmURL = 'https://www.npmjs.org';
 var startUrl = 'https://www.npmjs.org/browse/star';
 var starThresh = 50;
 
+// Use cheerio to get clone urls to repos with enough stars
+
 var scrapeCloneUrl = function(response, body) {
   if (response.statusCode === 200) {
     var $ = cheerio.load(body);
@@ -29,6 +31,8 @@ var scrapeCloneUrl = function(response, body) {
     }
   }
 };
+
+// Get link to repo from npmjs package page
 
 var scrapeRepoLink = function(response, body) {
   if ( response.statusCode == 200 ) {
@@ -53,6 +57,8 @@ var scrapeRepoLink = function(response, body) {
     return repoLink;
   }
 };
+
+// Get links of most starred packages and link to next page
 
 var scrapeStarredLinks = function(response, body) {
   // console.log('body', response[0].body);
@@ -80,6 +86,8 @@ var scrapeStarredLinks = function(response, body) {
   return [starredLinksArr, nextPageLink];
 };
 
+// Get links of depending packages and link to next page
+
 var scrapeDependedLinks = function(response, body) {
   if ( response.statusCode == 200 ) {
     var $ = cheerio.load(body);
@@ -106,6 +114,8 @@ var scrapeDependedLinks = function(response, body) {
 
   return [moduleLinksArr, nextPageLink];
 };
+
+// Clone repo and push files to database
 
 var cloneRepo = function(cloneUrl) {
   if ( !cloneUrl ) {
@@ -138,6 +148,8 @@ var cloneRepo = function(cloneUrl) {
   });
 };
 
+// Request github and extract clone url
+
 var getCloneUrl = function(repoHref) {
   if ( !repoHref ) {
     return;
@@ -148,6 +160,8 @@ var getCloneUrl = function(repoHref) {
       console.log('ERROR requesting github', err, '\n', repoHref);
     });
 };
+
+// Request npm package page and extract github repo Url
 
 var getRepoUrl = function(pageLink) {
   if ( !pageLink ) {
@@ -160,10 +174,16 @@ var getRepoUrl = function(pageLink) {
     });
 };
 
+// Get links to all dependant packages on page and recurse to next page
+
 var getDependingPage = function(dependedUrl) {
 
   return reqProm(dependedUrl).spread(scrapeDependedLinks)
     .spread(function(depLinks, nextPageLink) {
+
+      // Get repo Urls => get clone links from github => clone repos
+      // && push to db
+
       Promise.resolve(depLinks)
         .map(getRepoUrl)
         .map(getCloneUrl)
@@ -176,6 +196,9 @@ var getDependingPage = function(dependedUrl) {
         });
   });
 };
+
+// Get links to all popular packages on the page and recursively
+// go to next page
 
 var getStarredPage = function(starredUrl) {
   reqProm(starredUrl).spread(scrapeStarredLinks)

@@ -55,6 +55,9 @@ module.exports = function(content, fnQuery, searchOptions) {
   // console.log('fnQuery', fnQuery);
 
   if (methodMatches && methodMatches.length === 1 &&
+
+    // If the query is for library and function
+
       searchOptions.library === true &&
       searchOptions.func === true) {
 
@@ -73,25 +76,24 @@ module.exports = function(content, fnQuery, searchOptions) {
           parsedData[ i+2 ].type === 'Identifier') {
 
         fnQuery = fnQueryPartOne + '.' + fnQueryPartTwo;
-        // console.log('extracting snippit', {input: content, index: parsedData[ i ].range[0], query: fnQuery});
+
         var snippit = extractSnippit({input: content, index: parsedData[ i ].range[0], query: fnQuery});
 
         if (snippit) {
           resultsArr.push(snippit);
         }
-        // console.log('snippit', snippit);
+
       }
     }
   } else if ( !methodMatches ) {
+
+    // If only library or function is queried
+
     for ( var i = 0; i < parsedData.length; i++ ) {
       var o = parsedData[i];
-      // if (fnQuery === 'require' && o.value === 'require'
-      //     ) {
-      //   var snippit = extractSnippit({input: content, index: o.range[0], query: fnQuery });
-      //   if (snippit) {
-      //     resultsArr.push(snippit);
-      //   }
-      // } else
+
+      // If only a function was searched
+
       if (parsedData[ i-1 ] && parsedData[ i-2 ] &&
           searchOptions.library === false &&
           searchOptions.func === true &&
@@ -108,6 +110,8 @@ module.exports = function(content, fnQuery, searchOptions) {
         if (snippit) {
           resultsArr.push(snippit);
         }
+
+        // If only a library function
       } else if (parsedData[ i+1 ] && parsedData[ i+2 ] &&
                  searchOptions.library === true &&
                  searchOptions.func === false &&

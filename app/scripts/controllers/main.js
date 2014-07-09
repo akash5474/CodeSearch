@@ -43,8 +43,13 @@ angular.module('codeSearchApp')
     $scope.findCode = function () {
       $rootScope.statusMsg.msg = "Fetching code from database..."
       $scope.$emit('LOAD');
+
       apiRequest.findCode($scope.findLibrary.library, $scope.findFunction.libFunction).then(function(data) {
+
+        // Reset pagination and snippets
+
         $scope.loading = false;
+        $scope.page.currPage = 0;
         $scope.codeSnippits = data.codeSnippits;
         $scope.pageArray = data.pageArray;
       })
