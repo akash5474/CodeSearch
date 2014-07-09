@@ -80,11 +80,27 @@ angular.module('codeSearchApp')
         library = lib;
         libFunction = func;
 
-        var files = data.data.files;
+        var allFiles = data.data.files;
 
-        console.log('files', files.length);
+        console.log('files', allFiles[0].score);
         console.log('sOpts', searchOptions);
         console.log('sQuer', searchQuery);
+
+        allFiles.sort(function(a, b) {
+          if (a.score < b.score) {
+            return 1;
+          } else if (a.score > b.score) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+
+        console.log('files', allFiles[0].score);
+
+        var end = allFiles.length <= 1800 ? allFiles.length : 1800;
+
+        var files = allFiles.slice(0, end);
 
         var snippitPaths = [];
         var snippitsArray;

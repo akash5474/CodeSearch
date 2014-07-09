@@ -28,7 +28,8 @@ var extractSnippit = function(result) {
       bracketCounter[ content[i] ]++;
     }
 
-    if ( bracketCounter['{'] === bracketCounter['}']
+    if ( content[i] !== '.'
+      && bracketCounter['{'] === bracketCounter['}']
       && bracketCounter['('] === bracketCounter[')']
       && bracketCounter['['] === bracketCounter[']'] )
     {
@@ -93,12 +94,12 @@ module.exports = function(content, fnQuery, searchOptions) {
       // } else
       if (parsedData[ i-1 ] && parsedData[ i-2 ] &&
           searchOptions.library === false &&
-                 searchOptions.func === true &&
-                 o.type === 'Identifier' &&
-                 o.value === fnQuery &&
-                 parsedData[ i-1 ].type === 'Punctuator' &&
-                 parsedData[ i-1 ].value === '.' &&
-                 parsedData[ i-2 ].type === 'Identifier') {
+          searchOptions.func === true &&
+          o.type === 'Identifier' &&
+          o.value === fnQuery &&
+          parsedData[ i-1 ].type === 'Punctuator' &&
+          parsedData[ i-1 ].value === '.' &&
+          parsedData[ i-2 ].type === 'Identifier') {
 
         fnQuery = parsedData[ i-2 ].value + '.' + fnQuery;
         var snippit = extractSnippit({ input: content, index: parsedData[ i-2 ].range[0], query: fnQuery });
