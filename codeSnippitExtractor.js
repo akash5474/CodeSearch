@@ -84,13 +84,21 @@ module.exports = function(content, fnQuery, searchOptions) {
   } else if ( !methodMatches ) {
     for ( var i = 0; i < parsedData.length; i++ ) {
       var o = parsedData[i];
-      if (searchOptions.library === false &&
-          searchOptions.func === true &&
-          o.type === 'Identifier' &&
-          o.value === fnQuery &&
-          parsedData[ i-1 ].type === 'Punctuator' &&
-          parsedData[ i-1 ].value === '.' &&
-          parsedData[ i-2 ].type === 'Identifier') {
+      // if (fnQuery === 'require' && o.value === 'require'
+      //     ) {
+      //   var snippit = extractSnippit({input: content, index: o.range[0], query: fnQuery });
+      //   if (snippit) {
+      //     resultsArr.push(snippit);
+      //   }
+      // } else
+      if (parsedData[ i-1 ] && parsedData[ i-2 ] &&
+          searchOptions.library === false &&
+                 searchOptions.func === true &&
+                 o.type === 'Identifier' &&
+                 o.value === fnQuery &&
+                 parsedData[ i-1 ].type === 'Punctuator' &&
+                 parsedData[ i-1 ].value === '.' &&
+                 parsedData[ i-2 ].type === 'Identifier') {
 
         fnQuery = parsedData[ i-2 ].value + '.' + fnQuery;
         var snippit = extractSnippit({ input: content, index: parsedData[ i-2 ].range[0], query: fnQuery });

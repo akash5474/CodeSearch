@@ -149,7 +149,7 @@ angular.module('codeSearchApp')
             snippitsReturned.pageArray.push(i);
           }
 
-          return snippitsReturned
+          return snippitsReturned;
         });
 
       });
