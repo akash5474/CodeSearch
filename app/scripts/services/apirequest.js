@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('codeSearchApp')
-  .factory('apiRequest', function ($http, $timeout, codeParser) {
+  .factory('apiRequest', function ($http, $rootScope, $timeout, codeParser) {
     var apiRequest = {};
 
     var searchOptions;
     var searchQuery;
     var library = "";
     var libFunction = "";
+
+    var maxFiles = 500;
 
     var getDepVar = function(lib, file) {
       var parsedData = esprima.tokenize(file);
@@ -66,6 +68,10 @@ angular.module('codeSearchApp')
     };
 
     apiRequest.findCode = function (lib, func) {
+      $timeout(function() {
+        $rootScope.statusMsg.msg = "Parsing through files for example snippets...";
+      }, 3000);
+
       return $http({
         method:'GET',
         url:'/api/findFile',
@@ -75,6 +81,7 @@ angular.module('codeSearchApp')
         }
       })
       .then(function(data) {
+
         searchOptions = data.data.searchOptions;
         searchQuery = data.data.searchQuery;
         library = lib;
@@ -85,6 +92,7 @@ angular.module('codeSearchApp')
         console.log('files', allFiles[0].score);
         console.log('sOpts', searchOptions);
         console.log('sQuer', searchQuery);
+        // console.log($rootScope.statusMsg.msg);
 
         allFiles.sort(function(a, b) {
           if (a.score < b.score) {
@@ -98,7 +106,7 @@ angular.module('codeSearchApp')
 
         console.log('files', allFiles[0].score);
 
-        var end = allFiles.length <= 1800 ? allFiles.length : 1800;
+        var end = allFiles.length <= maxFiles ? allFiles.length : maxFiles;
 
         var files = allFiles.slice(0, end);
 
@@ -121,6 +129,7 @@ angular.module('codeSearchApp')
         return [snippitsArray, snippitPaths];
       })
       .then(function(results) {
+
         return $http.post('/api/popSnips',
           {data: results[1]})
         .then(function(data) {

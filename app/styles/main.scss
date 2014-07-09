@@ -359,6 +359,16 @@ span > pre {
   height:5px;
 }
 
+#status-msg {
+  margin-top: 10px;
+  text-align: center;
+  color: #3498DB;
+}
+
+#status-msg > p {
+  font-size: 1.3em;
+}
+
 /*a.loginlink{
   height:0;
   padding:0;

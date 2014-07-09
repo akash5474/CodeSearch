@@ -51,6 +51,9 @@
     <div></div>
     <div></div>
 </div>
+<div id="status-msg" ng-show="loading">
+  <p><strong>{{statusMsg.msg}}</strong></p>
+</div>
 <div ng-show="codeSnippits.length">
   <h3>Results:</h3>
   <div>
